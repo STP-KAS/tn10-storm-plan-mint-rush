@@ -2,7 +2,7 @@
 
 # METRICS: what to measure, and how
 
-One vocabulary with tn-master: [METRICS.md](https://github.com/STP-KAS/tn-master/blob/main/METRICS.md). TPS and tx/s are the same unit; what differs is **what is counted** and **over what window**. File formats: [../logs/README.md](../logs/README.md).
+One vocabulary with tn-master: [METRICS.md](https://github.com/STP-KAS/tn-master/blob/main/METRICS.md). TPS and tx/s are the same unit; what differs is **what is counted** and **over what window**. File formats: [../go/LOGGING.md](../go/LOGGING.md).
 
 ## Mint metrics (new for this test)
 

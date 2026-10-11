@@ -21,11 +21,12 @@ Will be renamed to `tn10-storm-YYYY-MM-DD` once a run date is set (the [11 Oct n
 | [plan/METRICS.md](plan/METRICS.md) | What to measure and how: mint success, time to accept p50/p90/p99, fee per mint, rejects by reason, evictions, network unique accepted, mass per block, fee-estimate buckets |
 | [plan/AUTO-FEE.md](plan/AUTO-FEE.md) | The capped automatic fee-raise algorithm under test, every rule tied to past evidence |
 | **go/** | |
-| [go/README.md](go/README.md) | What goes here once a date is set |
-| [go/GO-BOT.md](go/GO-BOT.md) | Bot run sheet: **draft, no date yet** |
-| [go/GO-BUILD.md](go/GO-BUILD.md) | Build run sheet: **draft, no date yet** |
+| [go/README.md](go/README.md) | Shared rules, the single clock (T0), roles, how GO works, arming. **NOT ARMED: rehearsal pending** |
+| [go/bot/GO-BOT.md](go/bot/GO-BOT.md) | Bot GO: minting arms A/B, its storm side, probes, count on n2 |
+| [go/build/GO-BUILD.md](go/build/GO-BUILD.md) | Build GO: second storm side, second counting node, no minting |
+| [go/LOGGING.md](go/LOGGING.md) | Every log file and column, both sides |
 | **logs/** | |
-| [logs/README.md](logs/README.md) | Planned CSV files and columns (same format as the [11 Oct LOGGING](https://github.com/STP-KAS/tn10-storm-2026-10-11/blob/main/go/LOGGING.md), plus mint files) |
+| [logs/README.md](logs/README.md) | Where the logs will land (`logs/bot/`, `logs/build/`, `logs/rehearsal/`); columns in [go/LOGGING.md](go/LOGGING.md) |
 
 > ## Thank you, Kaspa Pulse ([@gokugalax](https://x.com/gokugalax))
 >
@@ -71,7 +72,7 @@ Full plan: [plan/PLAN.md](plan/PLAN.md). Measurements: [plan/METRICS.md](plan/ME
 - **A KRC-20 mint is two lighter transactions** (commit, then reveal), and its token rules are checked by an off-chain indexer, not by the node ([docs/KCC20-VS-KRC20.md](docs/KCC20-VS-KRC20.md)).
 - **Mints compete for the same minter output.** A public KCC-20 minter is one output that each mint spends and recreates. Two mints on the same output: one wins, the node rejects the other as "already spent" (seen once on 7 Oct, [RESULTS.md §3](https://github.com/STP-KAS/stp-trump2028/blob/main/RESULTS.md)). A rush is a contention test as much as a throughput test.
 - **The question for builders:** does a capped automatic fee raise keep mints landing in seconds during a rush plus storm, and what does it cost compared with a fixed fee? **Needs testing.**
-- **Decided 11 Oct:** see below. **Still open:** the run date and the storm rate ([plan/PLAN.md](plan/PLAN.md#decisions-11-oct-2026)).
+- **Decided 11 Oct:** see below. **Only the date is open:** to be set, after the rehearsal passes. Run sheets: [go/](go/README.md) (**NOT ARMED: rehearsal pending**).
 
 ### Decisions (11 Oct 2026)
 
@@ -83,6 +84,8 @@ stp left these to TN10 ops ("you choose", 17:20Z / 19:20 CEST). Recorded here an
 4. **Optional phases:** contention (6) and carrier (7) are **in**. A KRC-20 / KNS comparison arm is **out** for now.
 5. **Arm A fixed fee:** the baseline (phase 1) normal fee estimate.
 6. **Run date:** to be set, after the rehearsal passes.
+7. **Storm rate** (stp: "solve it", 17:26Z / 19:26 CEST): bot side **1,200 tx/s flat** in every storm phase (11 Oct bot 5-hour mean 1,211.87 tx/s accepted, [steps.csv](https://github.com/STP-KAS/tn10-storm-2026-10-11/blob/main/logs/bot/steps.csv)); Build side at **Build's last clean rate, set in GO-BUILD at arming**.
+8. **Token:** per-mint limit **1,000**, supply **60,000,000** (room for 60,000 mints: 44,400 in phases 3 to 5 + 6,000 in phases 6 and 7 + about 19% spare). The rehearsal runs on its own small launch (supply 10,000,000). tn ops2 launches and splits both, the split tree sized to the parallel minters.
 
 ## Results
 

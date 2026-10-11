@@ -47,7 +47,7 @@ Same minters, same pool, same coins, same R7 to R11. Only R1 to R4 are replaced 
 
 ## What is logged for every arm B mint
 
-feerate at each attempt, bump count, reason for each bump (R2 or R3), cap hit yes/no, masses, fee in tKAS, outcome. Columns: [../logs/README.md](../logs/README.md).
+feerate at each attempt, bump count, reason for each bump (R2 or R3), cap hit yes/no, masses, fee in tKAS, outcome. Columns: [../go/LOGGING.md](../go/LOGGING.md).
 
 ## Pseudocode
 
