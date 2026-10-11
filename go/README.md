@@ -7,4 +7,6 @@ Nothing here starts a run. Once stp sets a date, these two files become the lock
 | File | Status |
 |---|---|
 | [GO-BOT.md](GO-BOT.md) | **draft, no date yet** |
-| [GO-BUILD.md](GO-BUILD.md) | **draft, no date yet**; Build's role is an open decision ([PLAN.md](../plan/PLAN.md#open-decisions-for-stp)) |
+| [GO-BUILD.md](GO-BUILD.md) | **draft, no date yet**; Build = second storm side + second counting node ([decisions](../plan/PLAN.md#decisions-11-oct-2026)) |
+
+Date to be set, after the [rehearsal](../plan/PLAN.md#rehearsal-before-any-date) passes.

@@ -71,7 +71,18 @@ Full plan: [plan/PLAN.md](plan/PLAN.md). Measurements: [plan/METRICS.md](plan/ME
 - **A KRC-20 mint is two lighter transactions** (commit, then reveal), and its token rules are checked by an off-chain indexer, not by the node ([docs/KCC20-VS-KRC20.md](docs/KCC20-VS-KRC20.md)).
 - **Mints compete for the same minter output.** A public KCC-20 minter is one output that each mint spends and recreates. Two mints on the same output: one wins, the node rejects the other as "already spent" (seen once on 7 Oct, [RESULTS.md §3](https://github.com/STP-KAS/stp-trump2028/blob/main/RESULTS.md)). A rush is a contention test as much as a throughput test.
 - **The question for builders:** does a capped automatic fee raise keep mints landing in seconds during a rush plus storm, and what does it cost compared with a fixed fee? **Needs testing.**
-- **Open for stp:** the run date, Build's role, and the mint volume target ([plan/PLAN.md §Open decisions](plan/PLAN.md#open-decisions-for-stp)).
+- **Decided 11 Oct:** see below. **Still open:** the run date and the storm rate ([plan/PLAN.md](plan/PLAN.md#decisions-11-oct-2026)).
+
+### Decisions (11 Oct 2026)
+
+stp left these to TN10 ops ("you choose", 17:20Z / 19:20 CEST). Recorded here and in [plan/PLAN.md](plan/PLAN.md#decisions-11-oct-2026).
+
+1. **Token launch and split:** tn ops2.
+2. **Volume:** the draft steps, 2, 5, 10, 20 mints/s (about 44,400 mints), **only after a scale rehearsal passes** ([REHEARSAL](plan/PLAN.md#rehearsal-before-any-date)).
+3. **Build:** second storm side, and the second node for the chain count. **All minting stays on the bot side**, so the fee A/B stays clean.
+4. **Optional phases:** contention (6) and carrier (7) are **in**. A KRC-20 / KNS comparison arm is **out** for now.
+5. **Arm A fixed fee:** the baseline (phase 1) normal fee estimate.
+6. **Run date:** to be set, after the rehearsal passes.
 
 ## Results
 
