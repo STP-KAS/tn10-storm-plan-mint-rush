@@ -78,5 +78,6 @@ Every source this plan uses, numbered. Read on 11 Oct 2026 (UTC). Our own repos 
 |---|---|---|
 | S31 | [rusty-kaspa PR #1147](https://github.com/kaspanet/rusty-kaspa/pull/1147) (open as read; link only) | Stale mempool after IBD; not tested by us |
 | S41 | [rusty-kaspa PR #1004](https://github.com/kaspanet/rusty-kaspa/pull/1004) (merged 15 May 2026; link only) | Network minimum relay fee raised |
+| S42 | [rusty-kaspa PR #1147, comment by oskrcl, 11 Oct 2026 16:20 UTC](https://github.com/kaspanet/rusty-kaspa/pull/1147#issuecomment-6111076516), and [commit b4df2d8](https://github.com/kaspanet/rusty-kaspa/pull/1147/commits/b4df2d8fb334aa2d179a563591781a783b63082d) by atharaldsen, 16:22 UTC (PR open, no maintainer review as of 19:40 UTC; link only) | A stale post-IBD mempool skews the fee estimator: priority 1,644 vs 100, about 8-15× overpay until the 24 h expiry; a non-mining node does not self-correct; the test asserts ready count and mass go to 0 after revalidation. Not tested by us |
 
-**Count: 40 numbered sources** (S1 to S41; S21 is not used). No comments or reactions were made on kaspanet or any third-party repo.
+**Count: 41 numbered sources** (S1 to S42; S21 is not used). No comments or reactions were made on kaspanet or any third-party repo.

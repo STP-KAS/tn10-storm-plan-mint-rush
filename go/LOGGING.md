@@ -20,7 +20,7 @@ Logging and probes run from **R1 (T0−00:30)** to END. The count files are writ
 
 - `rejects.csv` `reason` gains `script` (covenant rule failed) next to fee-too-low, mempool-full, orphan, double-spend, mass, rpc-timeout, rpc-closed, other.
 - `confirm.csv` must be filled this time (it has only a header row on 11 Oct), with `fee_tier` = probe tier or `mint-A` / `mint-B`, and a `p99_s` column added.
-- `events.csv` gains `phase-start`, `step-start`, `fee-bump`, `fee-cap-hit`, `minter-collision`, `rebroadcast`.
+- `events.csv` gains `phase-start`, `step-start`, `fee-bump`, `fee-cap-hit`, `fee-outlier`, `minter-collision`, `rebroadcast`.
 
 ## New files
 
@@ -87,7 +87,7 @@ Logging and probes run from **R1 (T0−00:30)** to END. The count files are writ
 
 ## Events added for this run
 
-`phase-start`, `step-start`, `saturated` (accepted < 95% of submitted for 60 s), `fee-freeze` (arm A fee set at T0+00:09), `fee-bump`, `fee-cap-hit`, `minter-collision`, `rebroadcast`, plus every 11 Oct event (`gate`, `rate-change`, `fix`, `node-dead`, `node-back`, `node-restart`, `miner-on`, `miner-off`, `coin-refresh`, `disk-guard`, `halt`, `deviation`, …).
+`phase-start`, `step-start`, `saturated` (accepted < 95% of submitted for 60 s), `fee-freeze` (arm A fee set at T0+00:09), `fee-bump`, `fee-cap-hit`, `fee-outlier` (a node's priority bucket more than 3× the median of the live nodes read, or 2 nodes more than 3× apart, or only 1 live node: node, its priority and normal[0], the median, reason; [AUTO-FEE R0](../plan/AUTO-FEE.md)), `minter-collision`, `rebroadcast`, plus every 11 Oct event (`gate`, `rate-change`, `fix`, `node-dead`, `node-back`, `node-restart`, `miner-on`, `miner-off`, `coin-refresh`, `disk-guard`, `halt`, `deviation`, …).
 
 ## Handoff files, Build to the bot
 

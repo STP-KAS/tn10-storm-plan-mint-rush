@@ -12,9 +12,12 @@ What tn-master ADVICE item 1 says in one line, written out so it can be tested: 
 | Mempool size | node RPC | Backlog building | round 1: "Detect congestion (mempool size / fee-estimate jump) and auto-bump" ([S8] Mitigation ideas) |
 | Own time to accept | own `virtual-chain-changed` subscription | The only signal that is about **our** mints | round 1: rebuild if a tx waits > 10 s ([S8]) |
 | Own rejects by reason | submit replies | `fee-too-low`, `mempool-full`, `double-spend` mean different fixes | [S24] reasons |
+| Same estimate from other nodes | `getFeeEstimate` on 2 or more live nodes (ideally 3) | One node's estimate can be badly wrong: a stale mempool made one TN10 node quote priority 1,644 vs 100 on another (upstream report, not tested by us) | [S42], [S31] |
 | Node state | node-dead rule | Do not read prices from a dead or lagging node | Kaspa Pulse ([S7] input 12) |
 
 ## Rules
+
+**R0. Multi-node fee read (applies before R1 to R4).** Every 5 s read `getFeeEstimate` from **at least 2, ideally 3, live nodes** (node-dead rule R10 first). Take the **median** of `priority` and of `normal[0]` across them; R1 to R4 use these medians, never one node's raw numbers. A node whose `priority` is **more than 3× the median priority** is ignored for that read and logged as a `fee-outlier` event (node, its priority and normal[0], the median). With only 2 live nodes a median cannot expose an outlier: if their priority buckets differ by more than 3×, use the lower node and log `fee-outlier`. With 1 live node, R0 cannot run: log `fee-outlier` reason `single-node` and keep the cap of R4 (no raise above the last multi-node median). Evidence: a non-mining TN10 node with a stale mempool (about 21.8k entries, about 99.7% already accepted) quoted priority 1,644 against 100 on a public endpoint, so fee logic that followed its priority bucket would overpay about 8-15× until the 24 h expiry ([S42]; upstream, **not tested by us**). Constants 3× and 2-3 nodes are *draft*.
 
 **R1. Base feerate.** `base = max(2 × normal[0], 2 × floor)`, recomputed every 30 s. `floor` = the node's minimum relay feerate (100 sompi/gram on our TN10 nodes, [S8]; mainnet's floor was raised by rusty-kaspa PR #1004, merged 15 May 2026, [S41]). Evidence: the round 6 rule `max(2 × normal[0], 200)` ([S17]); round 8: 2× normal kept covenant actions in the next block under storm with ≈20% more fee ([S19]). The 1 Oct storm used normal × 3, floor 300 ([S38]).
 
@@ -23,7 +26,7 @@ What tn-master ADVICE item 1 says in one line, written out so it can be tested: 
 **R3. Bump a waiting mint.** If a mint is not accepted 10 s after submit (*draft*, from [S8]), rebuild it at `min(1.5 × previous feerate, cap_rate)` on the **same inputs** (same minter output, same payer coin), so the old and new versions conflict and at most one lands. At most 4 bumps. **Needs testing:** whether the node accepts the higher-fee version while the old one is still in its mempool (replacement) or rejects it as a double spend; both outcomes are logged. If replacement is refused, the minter waits for the old version to land or leave, then rebuilds.
 
 **R4. Cap, in two units.**
-- `cap_rate = min(priority, 5 × normal[0])` sompi/gram (*draft* k = 5). Evidence: priority vs normal reached 8.4× and paying priority as-is burned about 900 tKAS in 11.5 min ([S12] item 5, [S14]); the draft issue proposes `min(priority, k × normal)` or an absolute maximum ([S14]).
+- `cap_rate = min(priority, 5 × normal[0])` sompi/gram (*draft* k = 5), with `priority` and `normal[0]` the R0 medians, so one node with a stale mempool cannot lift the cap. Evidence: priority vs normal reached 8.4× and paying priority as-is burned about 900 tKAS in 11.5 min ([S12] item 5, [S14]); the draft issue proposes `min(priority, k × normal)` or an absolute maximum ([S14]).
 - `cap_fee = 0.5 tKAS per mint` (*draft*): an absolute tKAS cap, because mint mass is large (storage 61,710 to 76,586 grams, [S22]) and a feerate multiple alone can still cost a lot per mint ([KCC20-VS-KRC20 §6](../docs/KCC20-VS-KRC20.md#6-fees)).
 - At the cap: **return an error and pause that minter**, never drain ([S12] item 5).
 
@@ -43,16 +46,18 @@ What tn-master ADVICE item 1 says in one line, written out so it can be tested: 
 
 ## Arm A (fixed fee), for comparison
 
-Same minters, same pool, same coins, same R7 to R11. Only R1 to R4 are replaced by one fixed feerate: the phase 1 normal estimate (*draft*, [PLAN.md](PLAN.md) open decision 8). No bumps.
+Same minters, same pool, same coins, same R7 to R11. R0 still runs for logging (`fee-outlier` events are written in both arms), but arm A never changes its fee. Only R1 to R4 are replaced by one fixed feerate: the phase 1 normal estimate (*draft*, [PLAN.md](PLAN.md) open decision 8). No bumps.
 
 ## What is logged for every arm B mint
 
-feerate at each attempt, bump count, reason for each bump (R2 or R3), cap hit yes/no, masses, fee in tKAS, outcome. Columns: [../go/LOGGING.md](../go/LOGGING.md).
+R0 medians and the nodes used for each read, `fee-outlier` events, feerate at each attempt, bump count, reason for each bump (R2 or R3), cap hit yes/no, masses, fee in tKAS, outcome. Columns: [../go/LOGGING.md](../go/LOGGING.md).
 
 ## Pseudocode
 
 ```text
-every 5 s:  read fee estimate, mempool size, node state (skip dead nodes)
+every 5 s:  read fee estimate, mempool size, node state from 2-3 live nodes (skip dead nodes)
+            prio = median(priority), normal0 = median(normal[0]); drop and log fee-outlier any node with priority > 3*prio
+            (2 nodes: if priorities differ > 3x, use the lower one, log fee-outlier)
 every 30 s: base = max(2*normal0, 2*floor)
             cap_rate = min(priority, 5*normal0)
             congested = normal0 jumped >50% in 60 s or mempool > 50,000
