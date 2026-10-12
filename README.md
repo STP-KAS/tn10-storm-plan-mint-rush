@@ -14,6 +14,7 @@ Will be renamed to `tn10-storm-YYYY-MM-DD` once a run date is set (the [11 Oct n
 | [docs/BACKGROUND.md](docs/BACKGROUND.md) | What a KCC-20 mint is, in plain words, and why a rush stresses the network |
 | [plan/CROWD-MINT.md](plan/CROWD-MINT.md) | **Run 1 (first, alone)**, crowd mint KASPER-style, headline = probe payment time to accept; cap 1,000,000 mints, about 33,300 land (not a mint-out): 2,000 wallets, KASPER tokenomics (verified, Kasplex API), NOT ARMED, Date: TBD (stp decides) |
 | [credits/](credits/README.md) | Credits: every input from Kaspa Pulse (@gokugalax, kaspapulse.com), [KASPA-PULSE.md](credits/KASPA-PULSE.md) |
+| [docs/MITIGATIONS.md](docs/MITIGATIONS.md) | **Early thesis** (our reasoning, open to challenge, not advice or a proposal to core devs): options to keep ordinary payments flowing in a mint rush (fee market, wallets, token throttles as good practice only, type-neutral node policy, a type-based share such as 70% KCC, consensus capacity), comparison table |
 | [docs/REVIEW-NOTES.md](docs/REVIEW-NOTES.md) | Outside review notes on this plan, credited |
 | [docs/KRC20-HISTORY.md](docs/KRC20-HISTORY.md) | KRC-20 launch history (2024), each claim verified or marked unverified; what is different with KCC-20; lessons mapped to test metrics |
 | [docs/KCC20-VS-KRC20.md](docs/KCC20-VS-KRC20.md) | How KCC-20 minting differs from KRC-20 minting: where the rules live, transaction shape, mass, who validates, failure modes, fees, coins, migration |

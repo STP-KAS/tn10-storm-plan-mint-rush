@@ -25,6 +25,8 @@ Reason: one run, one question. Phases 1 to 7 below are six questions in about 2.
 
 Each later run keeps the baseline, the node-dead rule, the count after END and the rehearsal gate. Volumes and coins below are per the full original design and shrink with each run.
 
+Mitigation options and what each run can measure to decide between them: [../docs/MITIGATIONS.md](../docs/MITIGATIONS.md) (**early thesis**).
+
 ## Pre-date checklist (all must be done before a date is set)
 
 1. **Time to accept must be proven measurable.** It was **not measured on 11 Oct**: `confirm.csv` stayed empty (header row only, [S25]). Time to accept is the answer to Run 1, so the rehearsal passes only if the confirm logger wrote rows for every probe and every mint, every minute (rehearsal pass criterion 6).
