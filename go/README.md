@@ -19,7 +19,11 @@ Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com). This run sheet is built on 
 3. **GO.** stp pastes the file to each side. **When this file lands in your chat, that is the GO. No questions. Problems are fixed and logged, never turned into a question.**
 4. **Lock.** Sending is not the start. It means: get ready now, be ready at T0, run to END without stp watching. A change after the lock goes in `events.csv` as a `deviation`.
 
-## The single clock
+## Run order
+
+**Run 1 = the crowd mint, first and alone** (no storm; clock in [GO-BOT](bot/GO-BOT.md#run-1-first-alone-crowd-mint-date-tbd-stp-decides) and [GO-BUILD](build/GO-BUILD.md#run-1-first-alone-crowd-mint-date-tbd-stp-decides); [CROWD-MINT.md](../plan/CROWD-MINT.md)). Headline: probe time to accept. Date TBD (stp decides). The P1-P7 clock below is the design for the **later short runs** (auto-fee A/B, contention, carrier, rush vs storm), each its own run ([run order](../plan/PLAN.md#run-order-12-oct-2026-after-outside-review)).
+
+## The single clock (later short runs, reference)
 
 **T0 = date to be set.** T0 is the start of phase 1 (baseline). Both sides read their times from this table only. Clocks in git are UTC. Brussels is **CEST = UTC+2** until 25 Oct 2026; from then **CET = UTC+1**. The arming commit fills the UTC and Brussels columns.
 

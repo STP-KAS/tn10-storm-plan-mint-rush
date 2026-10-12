@@ -1,8 +1,31 @@
 > **Experimental. We are just trying this.** [Disclaimer](../DISCLAIMER.md) · [Home](../README.md) · TN10 only. Mainnet: **not tested (label B)**. **Decided 11 Oct; date to be set, after the rehearsal passes.** Numbers marked *draft* are starting constants frozen at arming.
 
-# PLAN: KCC-20 mint rush under storm load
+# PLAN: KCC-20 mint rush (Run 1: crowd mint; later short runs)
 
 Times will be written **UTC first, CEST second** once T0 is set. Until then they are offsets from T0. Source numbers [S..] are in [../docs/SOURCES.md](../docs/SOURCES.md).
+
+## Run order (12 Oct 2026, after outside review)
+
+**Run 1, first and alone: the crowd mint** ([CROWD-MINT.md](CROWD-MINT.md)). One question: while a mint wave runs, do ordinary payments at normal fees still get in, and how long do they wait? **Headline metric: probe payment time to accept** (p50/p90/p99 vs a 10-minute baseline). No storm in Run 1. Date: **TBD (stp decides)**.
+
+Reason: one run, one question. Phases 1 to 7 below are six questions in about 2.5 hours under storm load; a problem early in that run would make the later phases hard to read.
+
+**Later short runs** (each its own short run, its own date, only after Run 1 is written up). The phase tables below are kept as their design:
+
+| Later run | Question | Design |
+|---|---|---|
+| L1 auto-fee A/B | Does a capped auto fee land mints faster than a fixed fee, and at what cost? (H2) | phases 1, 2 and 5 below |
+| L2 contention | How many mints lose the race on a shared minter output, and do losers pay? (H4, H6) | phase 6 below |
+| L3 carrier | Does a thin carrier raise storage mass and slow the rush? (H5) | phase 7 below |
+| L4 rush vs storm, fixed fee | What does a storm do to fixed-fee mints? (H3, H7) | phases 3 and 4 below |
+
+Each later run keeps the baseline, the node-dead rule, the count after END and the rehearsal gate. Volumes and coins below are per the full original design and shrink with each run.
+
+## Pre-date checklist (all must be done before a date is set)
+
+1. **Time to accept must be proven measurable.** It was **not measured on 11 Oct**: `confirm.csv` stayed empty (header row only, [S25]). Time to accept is the answer to Run 1, so the rehearsal passes only if the confirm logger wrote rows for every probe and every mint, every minute (rehearsal pass criterion 6).
+2. **The mint/payment split comes from our own logs.** An outside counter of accepted transactions and blocks per minute cannot tell mints from payments. Every sender therefore logs a `tx_type` per send (`mint`, `probe`, `storm`, `split`, `fanout`), and the per-minute split in the results is computed from those logs, not from the network count ([go/LOGGING.md](../go/LOGGING.md)).
+3. **Not a mint-out.** The Run 1 token copies KASPER's tokenomics, so its cap is **1,000,000 mints**, but the run lands **about 33,300 mints** (about 3.3%, arithmetic). The announcement says so in plain words, so nobody reads the end of the run as a mint-out ([CROWD-MINT.md](CROWD-MINT.md#announcement-text)).
 
 ## Decisions (11 Oct 2026)
 
@@ -33,7 +56,7 @@ A separate short run on a **quiet network** (no storm of ours), before the run d
   3. **0 coin-in-flight errors.**
   4. Time to accept, p90 ≤ 10 s.
   5. 0 `script` rejects (the covenant never refused a mint we built).
-  6. Every logger wrote every minute; `confirm.csv` and `mint-minute.csv` filled; host RAM stayed above the 1.5 GB floor.
+  6. Every logger wrote every minute; **`confirm.csv` has rows for every probe and every mint** (it stayed empty on 11 Oct), `mint-minute.csv` filled, every send row carries `tx_type`; host RAM stayed above the 1.5 GB floor.
   7. Leak-scan clean on the pushed logs.
 - **Fail:** fix, log the fix, rehearse again. No run date until a rehearsal passes. The rehearsal result is pushed to this repo under `logs/rehearsal/`.
 
@@ -65,7 +88,7 @@ A **new KCC-20 Last Call public-mint launch** on TN10, just for this test (trump
 - **Minters:** independent processes, each with its own payer coins and its own leaves (wide pools), or racing for shared leaves (narrow pool), like independent users in a rush.
 - **Volume:** decision 2; timing per phase: [go/README.md](../go/README.md#the-single-clock).
 
-## Phases
+## Phases (design for the later short runs; phase 9 = Run 1)
 
 | # | Phase | Duration | Storm (plain payments) | Mints | Fees | What it answers |
 |---|---|---|---|---|---|---|
@@ -79,7 +102,7 @@ A **new KCC-20 Last Call public-mint launch** on TN10, just for this test (trump
 | 6 | **Contention** (in, decision 4) | 10 min | on | narrow pool, 64 minters on 16 leaves, **5 mints/s** target | B rules | H4, H6: how many lose the race, and do losers pay? |
 | 7 | **Carrier** (in, decision 4) | 10 min | on | **5 mints/s**, half the minters with a 0.2 tKAS carrier | B rules | H5: does the thin carrier raise storage mass and slow the rush? |
 | 8 | **END, then COUNT** | END to END+2 h | off | off | — | Chain count per minute before pruning (Kaspa Pulse) |
-| 9 | **Crowd mint, KASPER-style** (separate run, NOT ARMED, Date: TBD (stp decides)) | about 1 h | off | 2,000 wallets, shared launch second, steps 2/5/10/20 mints/s | mixed: normal / overpay / retry-spam | Do ordinary payments still confirm? [CROWD-MINT.md](CROWD-MINT.md) |
+| 9 | **Run 1: crowd mint, KASPER-style** (FIRST run, alone, NOT ARMED, Date: TBD (stp decides)) | about 1 h | off | 2,000 wallets, shared launch second, steps 2/5/10/20 mints/s | mixed: normal / overpay / retry-spam | Do ordinary payments still confirm? [CROWD-MINT.md](CROWD-MINT.md) |
 
 **Probes in every phase:** one plain self-payment per fee tier every 30 s at 1×, 2×, 5× and 10× the node's minimum feerate, timed from submit to acceptance on the virtual chain (the round 1 method, [S8]). They show what happens to ordinary users (H7).
 

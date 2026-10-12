@@ -4,11 +4,36 @@
 >
 > Do not start anything from this file. It becomes the GO only after the [rehearsal](../../plan/PLAN.md#rehearsal-before-any-date) has passed and the arming commit has set T0 ([how GO works](../README.md#how-go-works)). **Once armed, this file pasted into your chat is the GO: no questions, problems are fixed and logged.**
 
-# GO-BUILD: KCC-20 mint rush under storm load, TN10 (Build side, on stp's desk)
+# GO-BUILD: KCC-20 mint rush, TN10: Run 1 crowd mint first, then later short runs (Build side, on stp's desk)
 
 You are **Grok Build** on stp's desk. This file is complete on its own. The bot runs the other half from [GO-BOT](../bot/GO-BOT.md); the plan is [PLAN.md](../../plan/PLAN.md).
 
 **Your jobs:** second storm side; **half of all minting** (both arms, P3 to P7) against **your desk node**; the second counting node. No probes.
+
+## Run 1 (first, alone): crowd mint. Date: TBD (stp decides)
+
+Since 12 Oct the **first run is the crowd mint, alone** ([CROWD-MINT.md](../../plan/CROWD-MINT.md)): do ordinary payments at normal fees still get in during a mint wave, and how long do they wait? **Headline: probe time to accept.** Not armed until the [pre-date checklist](../../plan/PLAN.md#pre-date-checklist-all-must-be-done-before-a-date-is-set) and the rehearsal pass (the rehearsal must show `confirm.csv` filling).
+
+| Step | Offset | Network mints/s | This side |
+|---|---|---|---|
+| PREP, gates, loggers (and probes) up | T0−01:00 to T0−00:10 | 0 | desk node synced, wallets funded |
+| **Baseline**, nothing of ours but probes | T0−00:10–T0+00:00 | 0 | reads only |
+| **Step 1** | T0+00:00–00:15 | 2 | wallets 1000-1999: 1 mint/s |
+| **Step 2** | T0+00:15–00:30 | 5 | wallets 1000-1999: 2.5 mints/s |
+| **Step 3** | T0+00:30–00:45 | 10 | wallets 1000-1999: 5 mints/s |
+| **Step 4** | T0+00:45–01:00 | 20 | wallets 1000-1999: 10 mints/s |
+| **END**, minters stop; probes run 10 more min | T0+01:00 | 0 | stop |
+| **COUNT** before pruning | T0+01:10–03:10 | — | count |
+
+No storm in Run 1. About 33,300 mints network-wide (about 16,650 per side), cap 1,000,000: **not a mint-out**, as the announcement says.
+
+- **Wallets 1000-1999** (keys reach the desk outside git; stp handles it), 80/15/5 normal/overpay/retry-spam, against the desk node.
+- Probes run on the bot side; Build logs its mints in `confirm.csv` and `mint-minute.csv`.
+- **Every send logs `tx_type`** (`mint`, `fanout`); the mint/payment split comes from these logs.
+
+## Later short runs (not Run 1)
+
+Everything below this line is the design for the **later short runs** (L1 auto-fee A/B = P1, P2, P5; L2 contention = P6; L3 carrier = P7; L4 = P3, P4), each its own short run on its own date after Run 1 ([run order](../../plan/PLAN.md#run-order-12-oct-2026-after-outside-review)). The combined P1-P7 clock is kept as the reference; each later run's arming commit cuts its own clock from it.
 
 ## Clock (shared with the bot)
 

@@ -10,7 +10,7 @@ Logging and probes run from **R1 (T0−00:30)** to END. The count files are writ
 
 - CSV, UTF-8, comma, one header row, LF line ends.
 - Time in UTC, ISO 8601 with `Z`. Seconds `2026-10-11T07:30:05Z`, minutes `2026-10-11T07:30Z`.
-- `side` is `bot` or `build`. `step` is `PREP`, `R` (rehearsal), `P1` … `P7`, `P9` (crowd mint, separate run) (the [PLAN.md](../plan/PLAN.md) phase) plus a step suffix, e.g. `P5-s3`, `idle` (a side not sending), or `COUNT`.
+- `side` is `bot` or `build`. `step` is `PREP`, `R` (rehearsal), `P1` … `P7`, `P9` (Run 1, crowd mint, the first run) (the [PLAN.md](../plan/PLAN.md) phase) plus a step suffix, e.g. `P5-s3`, `idle` (a side not sending), or `COUNT`.
 - An empty cell means **not measured**. Never 0 for not measured.
 - **Counts only in git.** No txid, key, seed, host IP, port, covenant id or wallet address. Public node names are allowed. Per-transaction logs stay on the machine that made them.
 
@@ -20,6 +20,8 @@ Logging and probes run from **R1 (T0−00:30)** to END. The count files are writ
 
 - `rejects.csv` `reason` gains `script` (covenant rule failed) next to fee-too-low, mempool-full, orphan, double-spend, mass, rpc-timeout, rpc-closed, other.
 - `confirm.csv` must be filled this time (it has only a header row on 11 Oct), with `fee_tier` = probe tier or `mint-A` / `mint-B`, and a `p99_s` column added.
+- **Every per-send log row carries `tx_type`** = `mint`, `probe`, `storm`, `split` or `fanout`. An outside per-minute counter sees only accepted transactions and blocks; the mint/payment split in the results comes from these rows (summed per minute in `mint-minute.csv` and `confirm.csv`), never from the network count.
+- The rehearsal checks that `confirm.csv` gets rows; an empty `confirm.csv` fails the rehearsal.
 - `events.csv` gains `phase-start`, `step-start`, `fee-bump`, `fee-cap-hit`, `fee-outlier`, `minter-collision`, `rebroadcast`.
 
 ## New files

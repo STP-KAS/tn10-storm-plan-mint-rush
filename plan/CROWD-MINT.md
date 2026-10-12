@@ -1,4 +1,6 @@
-# Phase 9: crowd mint, KASPER-style (DRAFT, NOT ARMED)
+# Run 1 (first, alone): crowd mint, KASPER-style (DRAFT, NOT ARMED)
+
+Formerly "phase 9". Since 12 Oct this is the **first run**, run alone; the other phases are [later short runs](PLAN.md#run-order-12-oct-2026-after-outside-review).
 
 > **NOT ARMED.** Approved by stp as a design only. **Date: TBD (stp decides).** Testnet-10 only, tKAS has no value. Separate run, about 1 hour, announced a day ahead in the TN10 channels with a UTC window.
 
@@ -6,7 +8,7 @@ If a KCC-20 mint rush ever congested mainnet for a day, that would be bad for Ka
 
 ## One question
 
-**Do ordinary payments still confirm during a 2,000-wallet mint rush?**
+**Do ordinary payments still confirm during a 2,000-wallet mint rush, and how long do they wait?** Headline metric: **probe payment time to accept**, p50/p90/p99, vs the 10-minute baseline.
 
 ## Token: KASPER's real KRC-20 tokenomics, copied
 
@@ -44,7 +46,7 @@ Our test token copies **max 28,700,000,000, 28,700 per mint, no premine, so 1,00
 - **Per side:** about 1,000 wallets, half of each step (1 / 2.5 / 5 / 10 mints/s), about 16,650 mints (arithmetic). The box stays within its 11 Oct proven load: no storm in this run, so the wallet processes replace the 18 storm senders; process count **TBD, confirmed at a rehearsal**.
 - **Shared launch second:** every minter starts at the same UTC second (T0, announced).
 - **Steps: the existing 2 / 5 / 10 / 20 mints/s**, 15 min each (about 1 hour). Mints per step: 1,800 / 4,500 / 9,000 / 18,000 = about 33,300 (arithmetic).
-- **Ordinary-payment probe:** a separate sender makes ordinary small payments at the normal fee throughout (rate **TBD**, low, e.g. 1/s), with a 10-min baseline before T0. This is the answer to the question.
+- **Ordinary-payment probe:** a separate sender makes ordinary small payments at the normal fee throughout (rate **TBD**, low, e.g. 1/s), with a 10-min baseline before T0. **This is the answer to the question (headline metric).** Each probe is logged in `confirm.csv` with `tx_type = probe`.
 
 ## Metrics (per minute unless noted; columns as [METRICS.md](METRICS.md))
 
@@ -57,6 +59,16 @@ Our test token copies **max 28,700,000,000, 28,700 per mint, no premine, so 1,00
 | Wallet change errors (change missing or wrong; fee paid vs intended) | Sep 2024 wallet bug sent change to miners as fee |
 | **Ordinary-payment wait time** p50/p90/p99 vs baseline | Low-fee user txs waited hours in the 2024 beta |
 | Retry-spammer share of mempool and of rejects | Retry storms add load without adding mints |
+
+## Announcement text
+
+Draft for stp (posted by stp, a day ahead, with the UTC window):
+
+> TN10 only, tKAS has no value. Crowd-mint test, about 1 hour, start [UTC] ([CEST]). The token copies KASPER's tokenomics (28,700,000,000 max, 28,700 per mint, no premine), so its cap is 1,000,000 mints. **This run lands about 33,300 mints (about 3.3%). It will not mint out, and that is intended**: we measure whether ordinary payments still get in during the rush, not the finish. Results, counts only, in this repo.
+
+## Pre-date checklist
+
+See [PLAN.md](PLAN.md#pre-date-checklist-all-must-be-done-before-a-date-is-set): confirm logger proven at the rehearsal (empty on 11 Oct); `tx_type` logged per send (mint / probe / fanout) so the mint/payment split comes from our logs; the not-a-mint-out line above in the announcement.
 
 ## Gates and stop rules
 

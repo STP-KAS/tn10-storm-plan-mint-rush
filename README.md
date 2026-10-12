@@ -12,7 +12,7 @@ Will be renamed to `tn10-storm-YYYY-MM-DD` once a run date is set (the [11 Oct n
 | [DISCLAIMER.md](DISCLAIMER.md) | Experimental, TN10 only, certainty labels |
 | **docs/** | |
 | [docs/BACKGROUND.md](docs/BACKGROUND.md) | What a KCC-20 mint is, in plain words, and why a rush stresses the network |
-| [plan/CROWD-MINT.md](plan/CROWD-MINT.md) | Phase 9, crowd mint KASPER-style: 2,000 wallets, KASPER tokenomics (verified, Kasplex API), NOT ARMED, Date: TBD (stp decides) |
+| [plan/CROWD-MINT.md](plan/CROWD-MINT.md) | **Run 1 (first, alone)**, crowd mint KASPER-style, headline = probe payment time to accept; cap 1,000,000 mints, about 33,300 land (not a mint-out): 2,000 wallets, KASPER tokenomics (verified, Kasplex API), NOT ARMED, Date: TBD (stp decides) |
 | [credits/](credits/README.md) | Credits: every input from Kaspa Pulse (@gokugalax, kaspapulse.com), [KASPA-PULSE.md](credits/KASPA-PULSE.md) |
 | [docs/REVIEW-NOTES.md](docs/REVIEW-NOTES.md) | Outside review notes on this plan, credited |
 | [docs/KRC20-HISTORY.md](docs/KRC20-HISTORY.md) | KRC-20 launch history (2024), each claim verified or marked unverified; what is different with KCC-20; lessons mapped to test metrics |
@@ -21,7 +21,7 @@ Will be renamed to `tn10-storm-YYYY-MM-DD` once a run date is set (the [11 Oct n
 | [docs/RISKS.md](docs/RISKS.md) | What can go wrong (machine, nodes, coins, spec), and the guard for each |
 | [docs/SOURCES.md](docs/SOURCES.md) | Every source, numbered, with the exact link and file path |
 | **plan/** | |
-| [plan/PLAN.md](plan/PLAN.md) | Phases: baseline, storm only, mint rush only, mint rush + storm, and auto-fee vs fixed-fee minters (A/B) |
+| [plan/PLAN.md](plan/PLAN.md) | Run order (Run 1 crowd mint first, alone; later short runs), pre-date checklist, rehearsal, and the phase design for the later runs (A/B, contention, carrier, rush vs storm) |
 | [plan/METRICS.md](plan/METRICS.md) | What to measure and how: mint success, time to accept p50/p90/p99, fee per mint, rejects by reason, evictions, network unique accepted, mass per block, fee-estimate buckets |
 | [plan/AUTO-FEE.md](plan/AUTO-FEE.md) | The capped automatic fee-raise algorithm under test, every rule tied to past evidence |
 | **go/** | |
@@ -75,12 +75,11 @@ A test plan for **Kaspa Testnet-10 (TN10)**: many people minting the same new KC
 
 ### How
 
-1. **Baseline** 10 minutes, nothing of ours on the network (Kaspa Pulse's rule).
-2. **Storm only**, at a fixed rate.
-3. **Mint rush only**, in fixed steps of mints per second.
-4. **Mint rush + storm**, fixed-fee minters.
-5. **Mint rush + storm, A/B**: fixed-fee minters (A) next to capped auto-fee minters (B), same coins, same nodes, interleaved.
-6. **COUNT** right after END, then the write-up.
+**Run 1, first and alone: the crowd mint** ([plan/CROWD-MINT.md](plan/CROWD-MINT.md)). About 1 hour, no storm: a 10-minute baseline, then 2,000 wallets minting in fixed steps (2, 5, 10, 20 mints/s), with **ordinary probe payments at the normal fee throughout as the headline metric**, then the COUNT right after END. Date: TBD (stp decides). The token's cap is 1,000,000 mints; the run lands about 33,300, so it does **not** mint out, by design.
+
+**Later short runs**, each its own run after Run 1 ([run order](plan/PLAN.md#run-order-12-oct-2026-after-outside-review)): auto-fee vs fixed-fee A/B, contention on a shared minter output, thin carrier, rush vs storm.
+
+**Before any date** ([pre-date checklist](plan/PLAN.md#pre-date-checklist-all-must-be-done-before-a-date-is-set)): the rehearsal must prove the confirm logger writes rows (time to accept was not measured on 11 Oct); every send logs its `tx_type`, so the mint/payment split comes from our own logs; the announcement says it is not a mint-out.
 
 Full plan: [plan/PLAN.md](plan/PLAN.md). Measurements: [plan/METRICS.md](plan/METRICS.md). The fee algorithm: [plan/AUTO-FEE.md](plan/AUTO-FEE.md).
 
@@ -90,6 +89,7 @@ Full plan: [plan/PLAN.md](plan/PLAN.md). Measurements: [plan/METRICS.md](plan/ME
 - **A KRC-20 mint is two lighter transactions** (commit, then reveal), and its token rules are checked by an off-chain indexer, not by the node ([docs/KCC20-VS-KRC20.md](docs/KCC20-VS-KRC20.md)).
 - **Mints compete for the same minter output.** A public KCC-20 minter is one output that each mint spends and recreates. Two mints on the same output: one wins, the node rejects the other as "already spent" (seen once on 7 Oct, [RESULTS.md §3](https://github.com/STP-KAS/stp-trump2028/blob/main/RESULTS.md)). A rush is a contention test as much as a throughput test.
 - **The question for builders:** does a capped automatic fee raise keep mints landing in seconds during a rush plus storm, and what does it cost compared with a fixed fee? **Needs testing.**
+- **Run order (12 Oct):** Run 1 = crowd mint, first and alone, headline = probe payment time to accept; the rest are later short runs. The decisions below apply to the later runs.
 - **Decided 11 Oct:** see below. **Only the date is open:** to be set, after the rehearsal passes. Run sheets: [go/](go/README.md) (**NOT ARMED: rehearsal pending**).
 
 ### Decisions (11 Oct 2026)
@@ -110,7 +110,3 @@ stp left these to TN10 ops ("you choose", 17:20Z / 19:20 CEST). Recorded here an
 **No run yet.** This section will hold, per phase: mint success rate, time to accept p50/p90/p99 per arm, fee per mint per arm, rejects by reason, network unique accepted tx/s (peak complete minute, mean, median), and the Kaspa Pulse cross-check. Until then nothing here is a result.
 
 Counts only. No IP, host, port, key, seed, txid, covenant id or wallet address in this repo. Public TN10 node names are allowed.
-
----
-
-Intentions are good; thought process is questionable. STP remains delusional.
