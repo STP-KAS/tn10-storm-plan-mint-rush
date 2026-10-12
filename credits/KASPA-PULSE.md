@@ -1,0 +1,14 @@
+> **Experimental. We are just trying this.** [Disclaimer](../DISCLAIMER.md) · [Home](../README.md)
+
+# Kaspa Pulse (@gokugalax, kaspapulse.com): inputs to this plan
+
+He counts our storms from the outside on his own two nodes. Contact goes through stp only; the bots never ping him.
+
+| # | Date | Input | What we did | Where |
+|---|---|---|---|---|
+| 1 | before 11 Oct | **Method**: plan first, 10-minute baseline, fixed steps, saturation defined before T0, node-dead rule, count right after END before pruning | Rules 1-6 of the plan | [plan/PLAN.md](../plan/PLAN.md#rules-carried-over-do-not-change-without-a-logged-deviation), [go/README.md](../go/README.md), [tn-master inputs](https://github.com/STP-KAS/tn-master/blob/main/credits/KASPA-PULSE.md) |
+| 2 | 10-12 Oct | **His counts as baseline evidence**: accepted in blocks, two independent nodes, per UTC minute, by block time; ~56 tx/s base load | Headline counter and cross-check; base-load figure used throughout | [plan/METRICS.md](../plan/METRICS.md), [tn10-storm-2026-10-11 credits](https://github.com/STP-KAS/tn10-storm-2026-10-11/tree/main/credits/kaspa-pulse), [tn10-storm-2026-10-10 credits](https://github.com/STP-KAS/tn10-storm-2026-10-10/tree/main/credits/kaspa-pulse) |
+| 3 | 12 Oct | **Short runs, one clear question each**, about an hour, announced a day ahead in the TN10 channels with a UTC window | Crowd-mint phase designed as a separate ~1 h run with one question | [plan/CROWD-MINT.md](../plan/CROWD-MINT.md) |
+| 4 | 12 Oct | **Multi-node fee logging offer**: fee estimate of both his nodes every minute | Fee estimates read from several nodes (AUTO-FEE R0, #1147 effect) | [plan/AUTO-FEE.md](../plan/AUTO-FEE.md) |
+| 5 | 12 Oct | **Review of this plan**: the question is fair and worth its own run after Saturday 17 Oct | Kept as its own run; date TBD (stp decides) | [docs/REVIEW-NOTES.md](../docs/REVIEW-NOTES.md) |
+| 6 | 12 Oct | **The narrower countable question**: while a mint wave runs, do normal payments at normal fees still get in, and how long do they wait? Whether minting "dilutes" mainnet is a different question TN10 cannot answer | Stated in the README (without naming him in the Why) and measured by ordinary-payment wait times | [README](../README.md), [plan/METRICS.md](../plan/METRICS.md) |
