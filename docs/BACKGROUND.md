@@ -11,7 +11,7 @@ Written for a smart non-developer first. Each piece of jargon is explained once.
 - **Block, 10 blocks per second.** TN10 aims at about 10 blocks a second [S6].
 - **Mass.** Kaspa's measure of how much room a transaction takes in a block, in **grams**. There are three budgets per block: **compute** 500,000, **storage** 500,000 and **transient** 1,000,000 grams [S6].
   - **Compute mass** grows with size and script work. A plain one-input, one-output payment is about 1,624 grams, so about 308 fit in a block, about 3,080 per second at 10 blocks per second [S6].
-  - **Storage mass** (from KIP-9) charges transactions that create small outputs out of big ones, so the network does not fill up with dust. Rough rule from the KRC-20 era: outputs below 0.2 KAS raise mass a lot [S30].
+  - **Storage mass** (from KIP-9) charges transactions that create small outputs out of big ones, so the network does not fill up with dust. The charge depends on the outputs relative to the inputs, not on a fixed threshold: in the 2024 KRC-20 beta, splitting a large coin into a big change output and a 0.2 KAS output gave about 25,000 grams per transaction [S30].
   - **Transient mass** charges raw size for a short time.
 - **Feerate.** Fee divided by mass, in **sompi per gram** (1 KAS = 100,000,000 sompi). Miners pick transactions with a weight of feerate cubed, so a higher feerate wins far more often, but it is a weighted draw, not a strict queue [S20, §4].
 - **Fee estimate.** `getFeeEstimate` on a node returns a **priority** bucket, **normal** buckets and **low** buckets: suggested feerates for "next block", "soon" and "eventually" [S17, S8].

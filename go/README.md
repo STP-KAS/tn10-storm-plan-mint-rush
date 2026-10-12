@@ -8,7 +8,9 @@
 
 Prompts: [GO-BOT](bot/GO-BOT.md) · [GO-BUILD](build/GO-BUILD.md) · logging: [LOGGING.md](LOGGING.md) · the plan: [../plan/PLAN.md](../plan/PLAN.md) · the fee algorithm: [../plan/AUTO-FEE.md](../plan/AUTO-FEE.md).
 
-Thank you, Kaspa Pulse ([@gokugalax](https://x.com/gokugalax)). This run sheet is built on his method: plan first, a baseline, fixed steps, saturation defined before T0, the node-dead rule, the chain count right after END, and his counter (**accepted in blocks, two independent nodes, per UTC minute, by block time**). Every network count includes about **56 tx/s** of TN10 base load (his figure). [Every input](https://github.com/STP-KAS/tn-master/blob/main/credits/KASPA-PULSE.md).
+> **Node note (12 Oct 2026):** box node n2 was stopped by the disk guard on 11 Oct and its data deleted on 12 Oct ([tn10-storm-2026-10-11 CHANGES-DURING-RUN](https://github.com/STP-KAS/tn10-storm-2026-10-11/blob/main/logs/bot/CHANGES-DURING-RUN.md)). Wherever this sheet says n2, read "the bot's box node"; which node is **TBD** before any date.
+
+Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com). This run sheet is built on his method: plan first, a baseline, fixed steps, saturation defined before T0, the node-dead rule, the chain count right after END, and his counter (**accepted in blocks, two independent nodes, per UTC minute, by block time**). Every network count includes about **56 tx/s** of TN10 base load (his figure). [Every input](https://github.com/STP-KAS/tn-master/blob/main/credits/KASPA-PULSE.md).
 
 ## How GO works
 

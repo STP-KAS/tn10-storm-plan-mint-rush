@@ -37,7 +37,7 @@ When this file lands in your chat, that is the GO. No questions. Get ready at on
 
 Steps change on the clock. A saturated step (accepted < 95% of submitted for 60 s, Kaspa Pulse's definition) is marked `saturated` and still runs its full time.
 
-Thank you, Kaspa Pulse ([@gokugalax](https://x.com/gokugalax)). The node-dead rule, the chain count right after END, the two-node per-minute counter and the baseline are his.
+Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com). The node-dead rule, the chain count right after END, the two-node per-minute counter and the baseline are his.
 
 ## Gates
 

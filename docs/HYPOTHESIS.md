@@ -6,8 +6,6 @@
 
 > The first big real-world load on mainnet once covenant tokens (KCC-20) are adopted there may well be a mint rush, like the KCC-20 mints on TN10. If so, dapps, wallets and infrastructure should already have congestion monitoring with an automatic, capped fee raise in place.
 
-_Wording updated 12 Oct 2026 to the master-file terms: covenants are already live on L1 since Toccata (DAA 474165565); KCC-20 is Last Call, not Final ([kaspa-master-file](https://github.com/STP-KAS/kaspa-master-file#readme), "Live", "KCC-20 wording", "KCC still open")._
-
 Source: [tn-master ADVICE, hypothetical section](https://github.com/STP-KAS/tn-master/blob/main/ADVICE-TO-DEVELOPERS.md#hypothetical-scenario-mint-rush-after-smart-contracts-stp-11-oct-2026), [FINDINGS 15](https://github.com/STP-KAS/tn-master/blob/main/FINDINGS.md), [OPEN-QUESTIONS 8](https://github.com/STP-KAS/tn-master/blob/main/docs/OPEN-QUESTIONS.md). **Hypothesis, open for debate. Not a prediction.** A TN10 test cannot prove what mainnet users will do. It can show what happens to mints, fees and ordinary traffic when a rush and a storm meet, and whether a capped auto fee helps.
 
 **Who proposed what:** the hypothesis is **stp's**. The idea to test it as a **mint rush under storm load on TN10** came from **TN10 ops (the bot)**.

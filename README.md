@@ -30,7 +30,7 @@ Will be renamed to `tn10-storm-YYYY-MM-DD` once a run date is set (the [11 Oct n
 | **logs/** | |
 | [logs/README.md](logs/README.md) | Where the logs will land (`logs/bot/`, `logs/build/`, `logs/rehearsal/`); columns in [go/LOGGING.md](go/LOGGING.md) |
 
-> ## Thank you, Kaspa Pulse ([@gokugalax](https://x.com/gokugalax))
+> ## Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com)
 >
 > This plan is built on Kaspa Pulse's method. He counts our storms from the outside on his own two nodes, and these rules come from him ([every input](https://github.com/STP-KAS/tn-master/blob/main/credits/KASPA-PULSE.md)):
 >

@@ -34,7 +34,7 @@ When this file lands in your chat, that is the GO. No questions. Start your desk
 
 Your storm is on for **110 minutes**: P2 (30) and P4 to P7 (80). Starts and stops are on the clock, whatever is happening.
 
-Thank you, Kaspa Pulse ([@gokugalax](https://x.com/gokugalax)). The node-dead rule, the chain count right after END, and the two-node per-minute count you are half of are his.
+Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com). The node-dead rule, the chain count right after END, and the two-node per-minute count you are half of are his.
 
 ## Gates
 

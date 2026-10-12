@@ -37,11 +37,11 @@ Sources are third-party unless marked. Labels: **Verified** = confirmed by at le
 
 ## 4. What is different with KCC-20
 
-- **Rules on chain.** A KRC-20 token's state is interpreted by off-chain indexers, not L1 consensus ([kaspa-master-file, "KRC-20 incident"](https://github.com/STP-KAS/kaspa-master-file#readme)). A properly written KCC-20 covenant gets **L1 enforcement** of its rules; KCC-20 itself is a spec (Last Call, not Final) (Michael Sutton, [20 Sep 2026](https://x.com/michaelsuttonil/status/2101641365419417797), via [kaspa-master-file, "KCC-20 wording"](https://github.com/STP-KAS/kaspa-master-file#readme)). A Sutton post on "mini-contracts" was not found in the master file; not quoted.
+- **Rules on chain.** A KRC-20 token's state is interpreted by off-chain indexers, not L1 consensus ([kaspa-master-file, "KRC-20 incident"](https://github.com/STP-KAS/kaspa-master-file#readme)). A properly written KCC-20 covenant gets **L1 enforcement** of its rules; KCC-20 itself is a spec (Last Call, not Final) (Michael Sutton, [20 Sep 2026](https://x.com/michaelsuttonil/status/2101641365419417797), via [kaspa-master-file, "KCC-20 wording"](https://github.com/STP-KAS/kaspa-master-file#readme)). Sutton, 11 Oct 2026, on KCC-20 vs Solana: sophisticated designs can build a multi-contract Argent app across partitioned state and multiple transactions ("that's why i called these 'mini programs'"), but contention over shared variables/state must be carefully designed ([kaspa-master-file, "KCC-20 wording"](https://github.com/STP-KAS/kaspa-master-file#readme)). The earlier post where he first used "mini programs" is not in the master file.
 - **One transaction per mint, not two** (commit/reveal), with storage mass 61,710-76,586 grams per mint on TN10 (11 Oct 2026, our measurement) ([tn-master FINDINGS 16](https://github.com/STP-KAS/tn-master/blob/main/FINDINGS.md), [KCC20-VS-KRC20.md](KCC20-VS-KRC20.md)).
 - **A mint on an already-spent minter is rejected by consensus before it pays** (seen once on TN10).
-- **Mechanics: to verify against spec** ([kaspanet/kccs](https://github.com/kaspanet/kccs)) before the run.
-- **Node side since 2024:** rusty-kaspa added replace-by-fee in the mempool ([commit 56c19c9, #499](https://github.com/biryukovmaxim/rusty-kaspa/commit/56c19c995c096ca0b13651003b71c0ac6bb16ff4), mirror) and fee estimation (`getFeeEstimate`, used in our storms).
+- **Mechanics: to verify against spec** (KCC-20 is Last Call, not Final; reference artifact argent-lang/kcc20-reference merged 7 Oct 2026, master file "KCC still open", "KCC20 reference") ([kaspanet/kccs](https://github.com/kaspanet/kccs)) before the run.
+- **Node side since 2024:** rusty-kaspa added replace-by-fee in the mempool ([kaspanet/rusty-kaspa #499](https://github.com/kaspanet/rusty-kaspa/pull/499), merged 22 Jul 2024) and fee estimation (`getFeeEstimate`, used in our storms).
 
 ## 5. Lessons for the TN10 mint-rush test
 
