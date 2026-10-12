@@ -4,7 +4,7 @@
 
 ## The big one (stp's, 11 Oct 2026)
 
-> A KCC-20 mint rush is likely once KCC-20 is adopted on mainnet. The open question is whether Kaspa absorbs it without ordinary users noticing. Kaspa is permissionless and that is the goal; no protocol change is proposed, and mint rushes are not "bad": they give the fee market a short-term fee and volume boost, with little lasting utility of their own. The concern is timing: if Kaspa breaks out of "its own village" (dapps, payments, many use cases, perhaps a crypto-casino influx and a new meme saga), a rush that disrupts mainnet for hours would hurt the users relying on it and Kaspa's image. Dapps, wallets and infrastructure should have congestion monitoring with an automatic, capped fee raise in place either way.
+> A KCC-20 mint rush is likely once KCC-20 is adopted on mainnet. The open question is whether Kaspa absorbs it without ordinary users noticing. Kaspa is permissionless and that is the goal; no protocol change is proposed, and mint rushes are not "bad": they give the fee market a short-term boost in transactions and miner fees, with little lasting utility. The concern is timing: if Kaspa breaks out of "its own village" (dapps, payments, many use cases, perhaps a crypto-casino influx and a new meme saga), a rush that disrupts mainnet for hours would hurt the users relying on it and Kaspa's image. Dapps, wallets and infrastructure should have congestion monitoring with an automatic, capped fee raise in place either way.
 >
 > It may turn out not to be a real concern. That would be a good outcome.
 
