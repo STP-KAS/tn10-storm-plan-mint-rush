@@ -8,7 +8,7 @@
 
 Prompts: [GO-BOT](bot/GO-BOT.md) · [GO-BUILD](build/GO-BUILD.md) · logging: [LOGGING.md](LOGGING.md) · the plan: [../plan/PLAN.md](../plan/PLAN.md) · the fee algorithm: [../plan/AUTO-FEE.md](../plan/AUTO-FEE.md).
 
-> **Node note (12 Oct 2026):** box node n2 was stopped by the disk guard on 11 Oct and its data deleted on 12 Oct ([tn10-storm-2026-10-11 CHANGES-DURING-RUN](https://github.com/STP-KAS/tn10-storm-2026-10-11/blob/main/logs/bot/CHANGES-DURING-RUN.md)). Wherever this sheet says n2, read "the bot's box node"; which node is **TBD** before any date.
+> **Node note (12 Oct 2026):** box node n2 was stopped by the disk guard on 11 Oct and its data deleted on 12 Oct ([tn10-storm-2026-10-11 CHANGES-DURING-RUN](https://github.com/STP-KAS/tn10-storm-2026-10-11/blob/main/logs/bot/CHANGES-DURING-RUN.md)). These sheets now say "the box node": a fresh pruned TN10 node on the box with a UTXO index, **TBD** (not yet synced) before any date.
 
 Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com). This run sheet is built on his method: plan first, a baseline, fixed steps, saturation defined before T0, the node-dead rule, the chain count right after END, and his counter (**accepted in blocks, two independent nodes, per UTC minute, by block time**). Every network count includes about **56 tx/s** of TN10 base load (his figure). [Every input](https://github.com/STP-KAS/tn-master/blob/main/credits/KASPA-PULSE.md).
 
@@ -38,7 +38,7 @@ Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com). This run sheet is built on 
 | **P6 contention**: narrow pool, 5 mints/s | T0+02:10–02:20 | — | — | mints (B rules) + storm | storm |
 | **P7 carrier**: 5 mints/s, half with 0.2 tKAS carrier | T0+02:20–02:30 | — | — | mints (B rules) + storm | storm |
 | **END**: all senders and minters stop, miners off | **T0+02:30** | — | — | yes | yes |
-| **COUNT** from two nodes, before pruning | T0+02:30–04:30 | — | — | n2 | Build's node |
+| **COUNT** from two nodes, before pruning | T0+02:30–04:30 | — | — | the box node | Build's node |
 | Logs pushed | by T0+05:30 | — | — | `logs/bot/` | `logs/build/` |
 | COMBINED and WRITE-UP pushed (tn ops2) | by T0+06:30 | — | — | yes | — |
 | Suggested window for Kaspa Pulse's counter (stp sends it) | T0−00:20 to T0+02:35 | — | — | — | — |
@@ -49,7 +49,7 @@ Step changes happen on the clock, never early, never extended. Probes (1×, 2×,
 
 | Side | Who | Does | Sends to | Node | Miner |
 |---|---|---|---|---|---|
-| Bot | **TN10 ops** (n2, miner, storm senders, minters) with **tn ops2** (logging, count, write-up) | **All minting** (arms A and B, P6, P7), storm side, probes | The five public TN10 nodes only | n2 on the box: reads, fee quotes, the bot's count, the miner. Never submits | 1 |
+| Bot | **TN10 ops** (the box node, miner, storm senders, minters) with **tn ops2** (logging, count, write-up) | **All minting** (arms A and B, P6, P7), storm side, probes | The five public TN10 nodes only | the box node on the box: reads, fee quotes, the bot's count, the miner. Never submits | 1 |
 | Build | **Grok Build** on stp's desk | **Second storm side**, **second counting node**. **No minting** | Its own desk node (75%) and the five public nodes (25%, backs off first) | Its desk node, pruned, UTXO index on | 1 |
 | Token | **tn ops2** | Launches and splits the run token (limit 1,000, supply 60,000,000) and the rehearsal token (limit 1,000, supply 10,000,000) before arming | — | — | — |
 
@@ -62,7 +62,7 @@ Never submit to the other side's node.
 - **Fees are fixed for every storm sender** (bot 400/600, Build 200/300), **no sit-out rule** in this run, so the storm load stays the same while mints compete. Mint fees: arm A fixed, arm B [AUTO-FEE](../plan/AUTO-FEE.md) with caps.
 - **Miners:** exactly one per side, one thread, on the side's own node, on at R2 if synced, off while that node is unsynced, off at END.
 - **Keep going, but fix first.** A problem is fixed and logged (`fix`, `deviation`). Only END or stp's halt stops the run.
-- **Count once, from the chain, from two nodes, soon after END** (Kaspa Pulse): n2 and Build's node, before pruning.
+- **Count once, from the chain, from two nodes, soon after END** (Kaspa Pulse): the box node and Build's node, before pruning.
 - **Log everything:** [LOGGING.md](LOGGING.md).
 - **Public repo:** counts only. No IP, host, port, key, seed, txid, covenant id, wallet address, tunnel or local path. Leak-scan before every push. No force-push, no tags, no releases.
 

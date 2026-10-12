@@ -54,7 +54,7 @@ Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com). The node-dead rule, the cha
 
 ## Your counting node
 
-Your desk node is **the second independent node** for the chain count (Kaspa Pulse's two-node rule). From R1, read the virtual chain live and write per UTC minute: network unique accepted, chain blocks, and the Pulse-method count (accepted in blocks, by block time). After END, recount T0−01:00 to END before pruning: `chain-count.csv`, `block-mass.csv`. The bot does the same from n2; the two are compared minute by minute.
+Your desk node is **the second independent node** for the chain count (Kaspa Pulse's two-node rule). From R1, read the virtual chain live and write per UTC minute: network unique accepted, chain blocks, and the Pulse-method count (accepted in blocks, by block time). After END, recount T0−01:00 to END before pruning: `chain-count.csv`, `block-mass.csv`. The bot does the same from the box node; the two are compared minute by minute.
 
 ## Node-dead rule (Kaspa Pulse)
 
@@ -64,7 +64,7 @@ A sender never fires at your node when: RPC fails for 5 s, the node is not synce
 
 - kaspad 2.1.0, testnet-10, **pruned, not archival**, UTXO index on, default mempool scale, peers and RPC on loopback only, no tunnel, no public peer port, a watcher that restarts it on the same flags.
 - Keep ≥ 30 GB disk and ≥ 4 GB RAM free; if either gets tight, prune your own old logs first (never the chain); lower the rate only as a last resort, logged as a `deviation`.
-- **Never submit to n2.**
+- **Never submit to the box node.**
 
 ## Coins
 
@@ -101,4 +101,4 @@ Only stp halts. Then: stop the watchdog first, senders to 0, wait 10 s, hard-kil
 
 ## Never
 
-No IP, host, port, key, seed, txid, covenant id, wallet address or local path in the repo. No tunnel. No tags, no releases, no force-push. No minting. No second miner. No archival. No storm fee other than 200/300. No change of storm rate inside the window except a logged `deviation`. No sending to n2. No more than 25% of senders on the public nodes. No firing at a dead node. No stopping before END unless stp halts.
+No IP, host, port, key, seed, txid, covenant id, wallet address or local path in the repo. No tunnel. No tags, no releases, no force-push. No minting. No second miner. No archival. No storm fee other than 200/300. No change of storm rate inside the window except a logged `deviation`. No sending to the box node. No more than 25% of senders on the public nodes. No firing at a dead node. No stopping before END unless stp halts.

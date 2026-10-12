@@ -70,7 +70,7 @@ A **new KCC-20 Last Call public-mint launch** on TN10, just for this test (trump
 | # | Phase | Duration | Storm (plain payments) | Mints | Fees | What it answers |
 |---|---|---|---|---|---|---|
 | R | **REHEARSAL** (separate day, quiet network) | about 20 min + setup | off | 2, 5, then 10 mints/s | arm B rules | Can our minters sustain the rate? [Pass criteria](#rehearsal-before-any-date) |
-| 0 | PREP and gates | T0−60 to T0 | off | off | — | Nodes synced, UTXO index on, coins counted, NTP offset logged, loggers up 30 min before T0 ([S24]) |
+| 0 | PREP and gates | T0−60 to T0 | off | off | — | Nodes synced (the box node is TBD: n2 was deleted on 12 Oct), UTXO index on, coins counted, NTP offset logged, loggers up 30 min before T0 ([S24]) |
 | 1 | **Baseline** | 10 min | off | off | — | Base load (about 56 tx/s), fee estimate at rest, mempool at rest ([S35]) |
 | 2 | **Storm only** | 30 min | on: **bot 1,200 tx/s flat** (decision 7; 11 Oct window mean 1,211.87 accepted, [S25] steps.csv), **Build at its last clean rate** | off | storm 400/600 sompi/gram (the 11 Oct GO fees, [S39]) | Reference for network unique accepted, mempool, fee estimate, probe times |
 | 3 | **Mint rush only** | 4 steps × 5 min | off | fixed steps **2, 5, 10, 20 mints/s** (decision 2) | fixed: the normal estimate read in phase 1 | Mint mass, mints per block, time to accept, rejects, without a storm |
@@ -78,8 +78,8 @@ A **new KCC-20 Last Call public-mint launch** on TN10, just for this test (trump
 | 5 | **Mint rush + storm, A/B** | 4 steps × 10 min | on, as phase 2 | same steps, minters split 50/50 by index parity | **A:** fixed as phase 3. **B:** capped auto fee ([AUTO-FEE.md](AUTO-FEE.md)) | H2: does the capped auto fee land mints faster, and at what cost? H3: does storm throughput hold? |
 | 6 | **Contention** (in, decision 4) | 10 min | on | narrow pool, 64 minters on 16 leaves, **5 mints/s** target | B rules | H4, H6: how many lose the race, and do losers pay? |
 | 7 | **Carrier** (in, decision 4) | 10 min | on | **5 mints/s**, half the minters with a 0.2 tKAS carrier | B rules | H5: does the thin carrier raise storage mass and slow the rush? |
-| 9 | **Crowd mint, KASPER-style** (separate run, NOT ARMED, Date: TBD (stp decides)) | about 1 h | off | 2,000 wallets, shared launch second, steps 2/5/10/20 mints/s | mixed: normal / overpay / retry-spam | Do ordinary payments still confirm? [CROWD-MINT.md](CROWD-MINT.md) |
 | 8 | **END, then COUNT** | END to END+2 h | off | off | — | Chain count per minute before pruning (Kaspa Pulse) |
+| 9 | **Crowd mint, KASPER-style** (separate run, NOT ARMED, Date: TBD (stp decides)) | about 1 h | off | 2,000 wallets, shared launch second, steps 2/5/10/20 mints/s | mixed: normal / overpay / retry-spam | Do ordinary payments still confirm? [CROWD-MINT.md](CROWD-MINT.md) |
 
 **Probes in every phase:** one plain self-payment per fee tier every 30 s at 1×, 2×, 5× and 10× the node's minimum feerate, timed from submit to acceptance on the virtual chain (the round 1 method, [S8]). They show what happens to ordinary users (H7).
 
@@ -110,7 +110,7 @@ With the decided steps: phases 3 to 5 = (2+5+10+20) mints/s × (300 + 300 + 600)
 ## Stop rules
 
 - **HALT** by stp at any time: senders and minters to 0, then a hard kill, nothing restarted ([S25] CHANGES-DURING-RUN, 14:33:01 CEST).
-- **Disk guard:** stop at 5 GB free; pruning can take about 16 GB in 30 minutes ([S15] lesson 4, tn-master ADVICE 14).
+- **Disk guard:** the box node stops below 10 GB free (11 Oct GO rule, as GO-BOT); Build keeps ≥ 30 GB free; pruning can take about 16 GB in 30 minutes ([S15] lesson 4, tn-master ADVICE 14).
 - **RAM guard:** extra processes only while box RAM ≥ 2.5 GB, never under 1.5 GB (the 11 Oct rule, [S25]).
 - **Cap guard:** an auto-fee minter that hits its cap returns an error and pauses; it never drains ([S12] item 5).
 - **Coins:** a side that runs out stops; that is logged, not hidden.

@@ -53,7 +53,7 @@ Two ways to make a fungible token on Kaspa. They look alike to a user ("I minted
 
 ## 6. Fees
 
-- KRC-20 beta: a 1 KAS fee per transaction gave about 4,000 sompi/gram even at high mass, against 1 to 4 typical then, so mints outranked ordinary traffic [S30] (third-party, mainnet, 2024; mainnet's minimum relay fee was raised later, rusty-kaspa PR #1004 merged 15 May 2026 [S41]).
+- KRC-20 beta: a 1 KAS fee per transaction gave about 4,000 sompi/gram even at high mass, against 1 to 4 typical then, so mints outranked ordinary traffic [S30] (third-party, mainnet, 2024; the network minimum relay fee was raised to 100 sompi/gram later, rusty-kaspa PR #1004 merged 15 May 2026 [S41]).
 - KCC-20 on TN10: 204 sompi/gram on 11 Oct, 100 on 9 Oct, on a quiet network [S22, S23]. Not yet measured under a storm.
 - Either way, fee = feerate × mass, and the mass is large, so a fee bump on a mint costs more tKAS than the same bump on a plain payment. The auto-fee cap must be in tKAS per mint, not just sompi per gram ([plan/AUTO-FEE.md](../plan/AUTO-FEE.md)).
 

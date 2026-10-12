@@ -24,7 +24,7 @@ Will be renamed to `tn10-storm-YYYY-MM-DD` once a run date is set (the [11 Oct n
 | [plan/AUTO-FEE.md](plan/AUTO-FEE.md) | The capped automatic fee-raise algorithm under test, every rule tied to past evidence |
 | **go/** | |
 | [go/README.md](go/README.md) | Shared rules, the single clock (T0), roles, how GO works, arming. **NOT ARMED: rehearsal pending** |
-| [go/bot/GO-BOT.md](go/bot/GO-BOT.md) | Bot GO: minting arms A/B, its storm side, probes, count on n2 |
+| [go/bot/GO-BOT.md](go/bot/GO-BOT.md) | Bot GO: minting arms A/B, its storm side, probes, count on the box node (TBD) |
 | [go/build/GO-BUILD.md](go/build/GO-BUILD.md) | Build GO: second storm side, second counting node, no minting |
 | [go/LOGGING.md](go/LOGGING.md) | Every log file and column, both sides |
 | **logs/** | |

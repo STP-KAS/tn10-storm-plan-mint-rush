@@ -2,7 +2,7 @@
 
 # LOGGING: both sides, same files, same columns
 
-Both sides log the same files with the same columns, so the bot's minutes, Build's minutes and Kaspa Pulse's minutes line up row by row. Base: [tn10-storm-2026-10-11 go/LOGGING.md](https://github.com/STP-KAS/tn10-storm-2026-10-11/blob/main/go/LOGGING.md), plus the mint files below. Thank you, Kaspa Pulse ([@gokugalax](https://x.com/gokugalax)): the per-UTC-minute format, the chain count before pruning and the two-node count are his.
+Both sides log the same files with the same columns, so the bot's minutes, Build's minutes and Kaspa Pulse's minutes line up row by row. Base: [tn10-storm-2026-10-11 go/LOGGING.md](https://github.com/STP-KAS/tn10-storm-2026-10-11/blob/main/go/LOGGING.md), plus the mint files below. Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com): the per-UTC-minute format, the chain count before pruning and the two-node count are his.
 
 Logging and probes run from **R1 (T0−00:30)** to END. The count files are written after END. Land in `logs/bot/`, `logs/build/` and, for the rehearsal, `logs/rehearsal/`.
 
@@ -10,7 +10,7 @@ Logging and probes run from **R1 (T0−00:30)** to END. The count files are writ
 
 - CSV, UTF-8, comma, one header row, LF line ends.
 - Time in UTC, ISO 8601 with `Z`. Seconds `2026-10-11T07:30:05Z`, minutes `2026-10-11T07:30Z`.
-- `side` is `bot` or `build`. `step` is `PREP`, `R` (rehearsal), `P1` … `P7` (the [PLAN.md](../plan/PLAN.md) phase) plus a step suffix, e.g. `P5-s3`, `idle` (a side not sending), or `COUNT`.
+- `side` is `bot` or `build`. `step` is `PREP`, `R` (rehearsal), `P1` … `P7`, `P9` (crowd mint, separate run) (the [PLAN.md](../plan/PLAN.md) phase) plus a step suffix, e.g. `P5-s3`, `idle` (a side not sending), or `COUNT`.
 - An empty cell means **not measured**. Never 0 for not measured.
 - **Counts only in git.** No txid, key, seed, host IP, port, covenant id or wallet address. Public node names are allowed. Per-transaction logs stay on the machine that made them.
 
@@ -54,7 +54,7 @@ Logging and probes run from **R1 (T0−00:30)** to END. The count files are writ
 |---|---|---|
 | `utc` | time | ISO UTC |
 | `side` | bot or build | text |
-| `node` | `n2`, Build's desk node, or a public node name | text |
+| `node` | `box`, Build's desk node, or a public node name | text |
 | `priority` | priority bucket feerate | sompi/gram |
 | `normal0` / `normal1` | first two normal buckets | sompi/gram |
 | `low0` | first low bucket | sompi/gram |
@@ -82,7 +82,7 @@ Logging and probes run from **R1 (T0−00:30)** to END. The count files are writ
 | File | Bot | Build |
 |---|---|---|
 | sec, minute, public-nodes, rejects, miner, host, node, events, gates, ntp, steps, SUMMARY | yes | yes |
-| chain-count, block-mass, pulse-method-minute | yes (n2) | yes (desk node) |
+| chain-count, block-mass, pulse-method-minute | yes (the box node) | yes (desk node) |
 | mint-minute, feeest, mint-mass-sample, confirm | yes | no (no minting) |
 
 ## Events added for this run

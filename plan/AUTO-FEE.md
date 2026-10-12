@@ -19,11 +19,11 @@ What tn-master ADVICE item 1 says in one line, written out so it can be tested: 
 
 **R0. Multi-node fee read (applies before R1 to R4).** Every 5 s read `getFeeEstimate` from **at least 2, ideally 3, live nodes** (node-dead rule R10 first). Take the **median** of `priority` and of `normal[0]` across them; R1 to R4 use these medians, never one node's raw numbers. A node whose `priority` is **more than 3× the median priority** is ignored for that read and logged as a `fee-outlier` event (node, its priority and normal[0], the median). With only 2 live nodes a median cannot expose an outlier: if their priority buckets differ by more than 3×, use the lower node and log `fee-outlier`. With 1 live node, R0 cannot run: log `fee-outlier` reason `single-node` and keep the cap of R4 (no raise above the last multi-node median). Evidence: a non-mining TN10 node with a stale mempool (about 21.8k entries, about 99.7% already accepted) quoted priority 1,644 against 100 on a public endpoint, so fee logic that followed its priority bucket would overpay about 8-15× until the 24 h expiry ([S42]; upstream, **not tested by us**). Constants 3× and 2-3 nodes are *draft*.
 
-**R1. Base feerate.** `base = max(2 × normal[0], 2 × floor)`, recomputed every 30 s. `floor` = the node's minimum relay feerate (100 sompi/gram on our TN10 nodes, [S8]; mainnet's floor was raised by rusty-kaspa PR #1004, merged 15 May 2026, [S41]). Evidence: the round 6 rule `max(2 × normal[0], 200)` ([S17]); round 8: 2× normal kept covenant actions in the next block under storm with ≈20% more fee ([S19]). The 1 Oct storm used normal × 3, floor 300 ([S38]).
+**R1. Base feerate.** `base = max(2 × normal[0], 2 × floor)`, recomputed every 30 s. `floor` = the node's minimum relay feerate: 100 sompi/gram, the network minimum set by rusty-kaspa PR #1004 (merged 15 May 2026, [S41]) and seen on our TN10 node ("10 sompi/gram was rejected as not standard", [S8]). Evidence: the round 6 rule `max(2 × normal[0], 200)` ([S17]); round 8: 2× normal kept covenant actions in the next block under storm with ≈20% more fee ([S19]). The 1 Oct storm used normal × 3, floor 300 ([S38]).
 
 **R2. Congestion jump.** If `normal[0]` rises by more than 50% within 60 s, or the mempool of the read node passes 50,000 (*draft*), new mints use `min(priority, cap_rate)` until both calm down for 2 minutes. Evidence: [S8] Mitigation ideas.
 
-**R3. Bump a waiting mint.** If a mint is not accepted 10 s after submit (*draft*, from [S8]), rebuild it at `min(1.5 × previous feerate, cap_rate)` on the **same inputs** (same minter output, same payer coin), so the old and new versions conflict and at most one lands. At most 4 bumps. **Needs testing:** whether the node accepts the higher-fee version while the old one is still in its mempool (replacement) or rejects it as a double spend; both outcomes are logged. If replacement is refused, the minter waits for the old version to land or leave, then rebuilds.
+**R3. Bump a waiting mint.** If a mint is not accepted 10 s after submit (*draft*, from [S8]), rebuild it at `min(1.5 × previous feerate, cap_rate)` on the **same inputs** (same minter output, same payer coin), so the old and new versions conflict and at most one lands. At most 4 bumps. rusty-kaspa has replace-by-fee in the mempool with a separate `submitTransactionReplacement` RPC ([#499](https://github.com/kaspanet/rusty-kaspa/pull/499), merged 22 Jul 2024); a plain submit of a conflicting tx is treated as a double spend. **Needs testing** on kaspad 2.1.0 with our minters; both outcomes are logged. If replacement is refused, the minter waits for the old version to land or leave, then rebuilds.
 
 **R4. Cap, in two units.**
 - `cap_rate = min(priority, 5 × normal[0])` sompi/gram (*draft* k = 5), with `priority` and `normal[0]` the R0 medians, so one node with a stale mempool cannot lift the cap. Evidence: priority vs normal reached 8.4× and paying priority as-is burned about 900 tKAS in 11.5 min ([S12] item 5, [S14]); the draft issue proposes `min(priority, k × normal)` or an absolute maximum ([S14]).
@@ -32,7 +32,7 @@ What tn-master ADVICE item 1 says in one line, written out so it can be tested: 
 
 **R5. Never buy priority by shrinking change.** The fee comes from a payer coin of ≥ 10 tKAS (*draft*) so the change stays large and storage mass does not jump. Evidence: a 150× fee on ~0.25 tKAS coins raised storage mass to ~69k grams, lowered the effective feerate to ~140 sompi/gram and dropped network rate to 300–440 tx/s ([S12] item 7, [S16]). Log storage mass before and after each bump.
 
-**R6. Fee = feerate × the node's ordering mass.** Compute the mint's compute, transient and storage mass and pay on the one the node orders by. Our pages disagree on which one that is for a covenant mint ([KCC20-VS-KRC20 §3](../docs/KCC20-VS-KRC20.md#3-mass-and-storage-mass-kip-9)); log all three. **Needs testing.**
+**R6. Fee = feerate × the node's ordering mass.** Compute the mint's compute, transient and storage mass and pay on the one the node orders by. Per rusty-kaspa PR #1004, the minimum fee applies to compute/transient mass while storage mass still counts for feerate/priority ([S41]); our pages disagree on which one orders a covenant mint ([KCC20-VS-KRC20 §3](../docs/KCC20-VS-KRC20.md#3-mass-and-storage-mass-kip-9)); log all three. **Needs testing.**
 
 **R7. Track coins in flight.** Keep a set of outpoints spent by our own pending mints; never build on one of them; release it only when the spending mint lands or is known gone. Evidence: 1,322 of 1,327 games failed with "already spent … in the mempool" without this ([S12] item 4); tn-master ADVICE 8 ([S4]).
 
@@ -59,12 +59,12 @@ every 5 s:  read fee estimate, mempool size, node state from 2-3 live nodes (ski
             prio = median(priority), normal0 = median(normal[0]); drop and log fee-outlier any node with priority > 3*prio
             (2 nodes: if priorities differ > 3x, use the lower one, log fee-outlier)
 every 30 s: base = max(2*normal0, 2*floor)
-            cap_rate = min(priority, 5*normal0)
+            cap_rate = min(prio, 5*normal0)
             congested = normal0 jumped >50% in 60 s or mempool > 50,000
 mint:
   leaf  = random leaf from pool, current state read from a node
   coin  = payer coin not in in_flight, >= 10 tKAS
-  rate  = congested ? min(priority, cap_rate) : base
+  rate  = congested ? min(prio, cap_rate) : base
   fee   = rate * ordering_mass(tx)
   if fee > cap_fee: error, pause minter
   submit; add inputs to in_flight; start timer
