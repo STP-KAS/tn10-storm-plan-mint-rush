@@ -12,6 +12,8 @@ You are the bot side: **TN10 ops** (box node, miner, storm senders, half the min
 
 ## Run 1 (first, alone): crowd mint. Date: TBD (stp decides)
 
+**Rehearsal: Sunday 18 Oct 2026, 16:00 UTC (18:00 CEST)** (set by stp), quiet network, [pass criteria](../../plan/PLAN.md#rehearsal-before-any-date). Run 1 date: TBD, after the rehearsal passes.
+
 Since 12 Oct the **first run is the crowd mint, alone** ([CROWD-MINT.md](../../plan/CROWD-MINT.md)): do ordinary payments at normal fees still get in during a mint wave, and how long do they wait? **Headline: probe time to accept.** Not armed until the [pre-date checklist](../../plan/PLAN.md#pre-date-checklist-all-must-be-done-before-a-date-is-set) and the rehearsal pass (the rehearsal must show `confirm.csv` filling).
 
 | Step | Offset | Network mints/s | This side |

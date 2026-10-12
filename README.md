@@ -89,6 +89,7 @@ Full plan: [plan/PLAN.md](plan/PLAN.md). Measurements: [plan/METRICS.md](plan/ME
 - **A KRC-20 mint is two lighter transactions** (commit, then reveal), and its token rules are checked by an off-chain indexer, not by the node ([docs/KCC20-VS-KRC20.md](docs/KCC20-VS-KRC20.md)).
 - **Mints compete for the same minter output.** A public KCC-20 minter is one output that each mint spends and recreates. Two mints on the same output: one wins, the node rejects the other as "already spent" (seen once on 7 Oct, [RESULTS.md §3](https://github.com/STP-KAS/stp-trump2028/blob/main/RESULTS.md)). A rush is a contention test as much as a throughput test.
 - **The question for builders:** does a capped automatic fee raise keep mints landing in seconds during a rush plus storm, and what does it cost compared with a fixed fee? **Needs testing.**
+- **Rehearsal: Sunday 18 Oct 2026, 16:00 UTC (18:00 CEST)** (set by stp), quiet network, [pass criteria](plan/PLAN.md#rehearsal-before-any-date). Run 1 date: TBD, after the rehearsal passes.
 - **Run order (12 Oct):** Run 1 = crowd mint, first and alone, headline = probe payment time to accept; the rest are later short runs. The decisions below apply to the later runs.
 - **Decided 11 Oct:** see below. **Only the date is open:** to be set, after the rehearsal passes. Run sheets: [go/](go/README.md) (**NOT ARMED: rehearsal pending**).
 

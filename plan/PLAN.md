@@ -6,6 +6,8 @@ Times will be written **UTC first, CEST second** once T0 is set. Until then they
 
 ## Run order (12 Oct 2026, after outside review)
 
+**Rehearsal: Sunday 18 Oct 2026, 16:00 UTC (18:00 CEST)** (set by stp), quiet network, [pass criteria](#rehearsal-before-any-date). Run 1 date: TBD, after the rehearsal passes.
+
 **Order across runs:** the Saturday 17 Oct run ([tn10-run-2026-10-17](https://github.com/STP-KAS/tn10-run-2026-10-17)) comes first; mint-rush Run 1 follows once its rehearsal passes. Date still TBD (stp decides).
 
 **Run 1, first and alone: the crowd mint** ([CROWD-MINT.md](CROWD-MINT.md)). One question: while a mint wave runs, do ordinary payments at normal fees still get in, and how long do they wait? **Headline metric: probe payment time to accept** (p50/p90/p99 vs a 10-minute baseline). No storm in Run 1. Date: **TBD (stp decides)**.
@@ -48,7 +50,7 @@ stp left these to TN10 ops ("you choose", 17:20Z / 19:20 CEST). They replace the
 
 ## Rehearsal (before any date)
 
-A separate short run on a **quiet network** (no storm of ours), before the run date is set. Reason: the only KCC-20 mints we have landed came one every 2 to 3 s from one submitter ([S22]); the plan needs 20 mints/s from parallel minters.
+**Date: Sunday 18 Oct 2026, 16:00 UTC (18:00 CEST)** (set by stp). A separate short run on a **quiet network** (no storm of ours), before the run date is set. Reason: the only KCC-20 mints we have landed came one every 2 to 3 s from one submitter ([S22]); the plan needs 20 mints/s from parallel minters.
 
 - **Who:** tn ops2 launches and splits the separate rehearsal token (decision 8); the bot runs parallel minters with the arm B code (AUTO-FEE R1 to R11) and full logging ([../go/LOGGING.md](../go/LOGGING.md)).
 - **Shape:** 5 min at 2 mints/s, 5 min at 5, then **10 min at 10 mints/s**, from at least 8 parallel minter processes on the wide pool.
