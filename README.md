@@ -13,6 +13,7 @@ Will be renamed to `tn10-storm-YYYY-MM-DD` once a run date is set (the [11 Oct n
 | **docs/** | |
 | [docs/BACKGROUND.md](docs/BACKGROUND.md) | What a KCC-20 mint is, in plain words, and why a rush stresses the network |
 | [plan/CROWD-MINT.md](plan/CROWD-MINT.md) | Phase 9, crowd mint KASPER-style: 2,000 wallets, KASPER tokenomics (verified, Kasplex API), NOT ARMED, Date: TBD (stp decides) |
+| [docs/REVIEW-NOTES.md](docs/REVIEW-NOTES.md) | Outside review notes on this plan, credited |
 | [docs/KRC20-HISTORY.md](docs/KRC20-HISTORY.md) | KRC-20 launch history (2024), each claim verified or marked unverified; what is different with KCC-20; lessons mapped to test metrics |
 | [docs/KCC20-VS-KRC20.md](docs/KCC20-VS-KRC20.md) | How KCC-20 minting differs from KRC-20 minting: where the rules live, transaction shape, mass, who validates, failure modes, fees, coins, migration |
 | [docs/HYPOTHESIS.md](docs/HYPOTHESIS.md) | stp's hypothesis, and the narrower things this test can actually check |
@@ -64,6 +65,8 @@ A test plan for **Kaspa Testnet-10 (TN10)**: many people minting the same new KC
 - **What we already know, all TN10:** minimum fee under overload waited up to 105 s, 10x the minimum always landed in 3.7 s or less ([round 1](https://github.com/STP-KAS/tn10-storm-2026-09-25-r1/blob/main/findings/overload-30m-summary.md)); paying the uncapped "priority" estimate burned about 900 tKAS in 11.5 minutes ([stress findings, item 5](https://github.com/STP-KAS/tn10-storm-2026-09-25#not-addressed-by-pr-165-status-per-the-author-26-sep)); 2,488 KCC-20 mints landed with 0 rejects on a quiet network on 11 Oct ([stp-trump2028](https://github.com/STP-KAS/stp-trump2028/blob/main/map/bot/FINDINGS.md)). **Nobody here has tested a mint rush under storm load.**
 
 **Hypothesis (stp, 11 Oct 2026; open for debate):** a KCC-20 mint rush is likely once KCC-20 is adopted on mainnet. The question is whether Kaspa absorbs it, with fees and blocks doing their job, **without ordinary users noticing**: no hours-long backlog, no stuck payments, no wallets paying the wrong fee. If so, dapps, wallets and infrastructure still benefit from congestion monitoring with an automatic, capped fee raise ([tn-master ADVICE, hypothetical section](https://github.com/STP-KAS/tn-master/blob/main/ADVICE-TO-DEVELOPERS.md#hypothetical-scenario-mint-rush-after-smart-contracts-stp-11-oct-2026)). The idea to test it as a mint rush under storm load on TN10 came from TN10 ops (the bot).
+
+**The countable question:** while a mint wave runs, do normal payments at normal fees still get in, and how long do they wait? Whether minting "dilutes" mainnet (its value, attention or use) is a different question that a TN10 test cannot answer.
 
 **It may turn out not to be a real concern.** If TN10 shows that one on-chain transaction per mint with consensus-enforced rules, today's fee estimation and replace-by-fee keep ordinary payments flowing, that is a good outcome, and we will say so.
 
