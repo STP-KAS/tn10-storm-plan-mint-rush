@@ -53,3 +53,13 @@ Sources are third-party unless marked. Labels: **Verified** = confirmed by at le
 | Wallet used leftover value as fee / bad change handling | Fee paid vs fee intended per mint; change output present and correct on every mint; rejects by reason |
 | Fees under the protocol minimum, mints failed but paid | Rejects by reason; minted vs paid |
 | RPC gateways overloaded | Node-dead rule events and RPC error rate per node |
+
+## 6. The September 2026 Kasplex indexer exploit
+
+Labels: **confirmed** = Kasplex's own posts or release; **reported** = third-party account, not checked first-hand. Times CEST. No addresses or txids here.
+
+- **Reported** (ZealousSwap incident report, [relayed by Recon](https://x.com/ReconProtocol/status/2101642546803863779); [kaspa.news](https://kaspa.news/articles/inside-the-krc-20-theft-what-we-know-so-far); [Bitcoin.com News](https://news.bitcoin.com/security/kasplex-krc-20-indexer-signature-bypass-drains-two-token-pools/)): on 20 Sep 2026 five transactions that Kaspa L1 accepted as valid scripts were counted by the Kasplex KRC-20 indexer as transfers out of a bridge custody address without its key (about 186.4M ZEAL and 54.4B NACHO). The script used an empty signature with `OP_NOT` after `OP_ENDIF`, so the failed signature check was flipped to true; the indexer did not require the canonical script form. The tokens were bridged and sold into ZealousSwap pools.
+- **Confirmed** (Kasplex on X): 21 Sep 06:01, attacks under investigation, public API disabled ([post](https://x.com/kasplex/status/2101884384634900931)); 22 Sep 06:49, vulnerability confirmed, fixes done, full-state revert then an indexer rule change ([post](https://x.com/kasplex/status/2102259081277059509)); 1 Oct 16:50, public APIs restored ([post](https://x.com/kasplex/status/2105671749463654843)); 3 Oct 08:12, self-hosters must reindex ([post](https://x.com/kasplex/status/2106266083166671152)).
+- **Confirmed** (GitHub): release `krc20d-3.01.260930`, "Fixed a vulnerability in the script parser" ([go-krc20d releases](https://github.com/kasplex/go-krc20d/releases), 3 Oct).
+- **Not an L1 / consensus exploit:** KRC-20 balances live in the off-chain indexer; Kaspa L1 behaved as specified (**reported**, consistent with the Kasplex posts, which describe an indexer fix).
+- **Open as of 12 Oct 2026 (reported):** final ZEAL/NACHO recovery plan ([ZealousSwap, 10 Oct](https://x.com/ZealousSwap/status/2108928179486232920)); no full Kasplex post-mortem found.
