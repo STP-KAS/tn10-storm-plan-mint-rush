@@ -6,6 +6,8 @@ Times will be written **UTC first, CEST second** once T0 is set. Until then they
 
 ## Run order (12 Oct 2026, after outside review)
 
+**Order across runs:** the Saturday 17 Oct run ([tn10-run-2026-10-17](https://github.com/STP-KAS/tn10-run-2026-10-17)) comes first; mint-rush Run 1 follows once its rehearsal passes. Date still TBD (stp decides).
+
 **Run 1, first and alone: the crowd mint** ([CROWD-MINT.md](CROWD-MINT.md)). One question: while a mint wave runs, do ordinary payments at normal fees still get in, and how long do they wait? **Headline metric: probe payment time to accept** (p50/p90/p99 vs a 10-minute baseline). No storm in Run 1. Date: **TBD (stp decides)**.
 
 Reason: one run, one question. Phases 1 to 7 below are six questions in about 2.5 hours under storm load; a problem early in that run would make the later phases hard to read.
