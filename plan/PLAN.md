@@ -78,6 +78,7 @@ A **new KCC-20 Last Call public-mint launch** on TN10, just for this test (trump
 | 5 | **Mint rush + storm, A/B** | 4 steps × 10 min | on, as phase 2 | same steps, minters split 50/50 by index parity | **A:** fixed as phase 3. **B:** capped auto fee ([AUTO-FEE.md](AUTO-FEE.md)) | H2: does the capped auto fee land mints faster, and at what cost? H3: does storm throughput hold? |
 | 6 | **Contention** (in, decision 4) | 10 min | on | narrow pool, 64 minters on 16 leaves, **5 mints/s** target | B rules | H4, H6: how many lose the race, and do losers pay? |
 | 7 | **Carrier** (in, decision 4) | 10 min | on | **5 mints/s**, half the minters with a 0.2 tKAS carrier | B rules | H5: does the thin carrier raise storage mass and slow the rush? |
+| 9 | **Crowd mint, KASPER-style** (separate run, NOT ARMED, Date: TBD (stp decides)) | about 1 h | off | 2,000 wallets, shared launch second, steps 2/5/10/20 mints/s | mixed: normal / overpay / retry-spam | Do ordinary payments still confirm? [CROWD-MINT.md](CROWD-MINT.md) |
 | 8 | **END, then COUNT** | END to END+2 h | off | off | — | Chain count per minute before pruning (Kaspa Pulse) |
 
 **Probes in every phase:** one plain self-payment per fee tier every 30 s at 1×, 2×, 5× and 10× the node's minimum feerate, timed from submit to acceptance on the virtual chain (the round 1 method, [S8]). They show what happens to ordinary users (H7).
