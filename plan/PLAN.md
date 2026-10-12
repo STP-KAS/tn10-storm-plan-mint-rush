@@ -12,7 +12,7 @@ stp left these to TN10 ops ("you choose", 17:20Z / 19:20 CEST). They replace the
 |---|---|---|
 | 1 | **Token launch and split: tn ops2** | open decision 5 |
 | 2 | **Volume: 2, 5, 10, 20 mints/s per step (about 44,400 mints in phases 3 to 5), gated on the [REHEARSAL](#rehearsal-before-any-date) passing first** | open decision 3 |
-| 3 | **Build: second storm side plus the second node for the chain count. All minting (arms A and B, phases 6 and 7) stays on the bot side**, so the fee A/B is not mixed with a second machine | open decision 2 |
+| 3 | **Load shared with Build (stp, 12 Oct, as 11 Oct):** Build is the second storm side, the second counting node and runs **half the minters** against its own desk node; the bot runs the other half against the box node. Each side runs both arms, so the A/B is compared inside each side and the two sides are compared with each other. Leaves and coins are disjoint per side | decision 3 of 11 Oct (all minting on the bot side) |
 | 4 | **Phases 6 (contention) and 7 (carrier): in. KRC-20 / KNS comparison arm: out for now** | open decisions 6, 7 |
 | 5 | **Arm A fixed fee = the phase 1 (baseline) normal fee estimate**, read once and frozen | open decision 8 |
 | 6 | **Run date: to be set**, after the rehearsal passes | open decision 1 |
@@ -56,8 +56,8 @@ A **new KCC-20 Last Call public-mint launch** on TN10, just for this test (trump
 
 - **Supply and limit (decision 8):** per-mint limit **1,000**, supply **60,000,000** (60,000 mints). Rehearsal: a separate launch, limit 1,000, supply 10,000,000.
 - **Leaves (minters), sized to the parallel minters:** split tree as in [S20] (1, 2, 4, … rounds). Each minter process owns its leaves, so mints on one leaf are serial and do not collide, except in the narrow pool.
-  - **Wide pool A: 1,024 leaves, wide pool B: 1,024 leaves**, each leaf with an allowance of **26 mints (26,000 tokens)**: 53,248 mints of room for phases 3, 4, 5 and 7 (they need 47,400). Phases 3 and 4 use both pools with arm A rules; phase 5 gives pool A to arm A and pool B to arm B. **32 minter processes per arm**, 32 leaves each; at the top step (10 mints/s per arm) a process mints about every 3.2 s and cycles through its 32 leaves, so a leaf is reused about every 100 s, long after its last mint landed.
-  - **Narrow pool: 16 leaves**, each **300 mints (300,000 tokens)**: 4,800 mints of room (phase 6 needs 3,000), shared by **64 minter processes** (phase 6, H4): four minters race for each leaf on purpose.
+  - **Wide pool A: 1,024 leaves, wide pool B: 1,024 leaves**, each leaf with an allowance of **26 mints (26,000 tokens)**: 53,248 mints of room for phases 3, 4, 5 and 7 (they need 47,400). Phases 3 and 4 use both pools with arm A rules; phase 5 gives pool A to arm A and pool B to arm B. **32 minter processes per arm** (16 per side), 32 leaves each; **the bot side owns leaves 0-511 of each wide pool, Build owns 512-1023**; at the top step (10 mints/s per arm) a process mints about every 3.2 s and cycles through its 32 leaves, so a leaf is reused about every 100 s, long after its last mint landed.
+  - **Narrow pool: 16 leaves**, each **300 mints (300,000 tokens)**: 4,800 mints of room (phase 6 needs 3,000), shared by **64 minter processes** (phase 6, H4): four minters race for each leaf on purpose. Split: leaves 0-7 and 32 processes on the bot side, leaves 8-15 and 32 on Build.
   - The remaining 1,952,000 tokens stay on the root minter as reserve.
   - 2,064 leaves = 2,063 splits. Rehearsal launch: **256 leaves** (255 splits), 39 mints each, 8+ minter processes.
   - tn ops2 may change leaf counts at launch for a technical reason; it logs that as a `deviation` and writes the final counts (no ids) in [go/README.md](../go/README.md).
@@ -95,8 +95,8 @@ A **new KCC-20 Last Call public-mint launch** on TN10, just for this test (trump
 
 | Who | Does | Writes |
 |---|---|---|
-| **Bot (TN10 ops)** | Storm senders, **all minters** (arms A and B, phases 6 and 7), probes, the chain count on its node, the live Kaspa Pulse-method counter | `logs/bot/` |
-| **Build** | **Second storm side** and **the second node for the chain count** (decision 3). No minting | `logs/build/` |
+| **Bot (TN10 ops)** | Storm senders, **half the minters** (both arms) on the box node, probes, the chain count on its node, the live Kaspa Pulse-method counter | `logs/bot/` |
+| **Build** | **Second storm side**, **the second node for the chain count**, and **half the minters** (both arms) on its desk node (decision 3) | `logs/build/` |
 | **tn ops2** | **Launches and splits the token** (decision 1; it built the trump2028 odd mints, [S22]) | `logs/` |
 | **Kaspa Pulse** | Independent outside count, if he wants to; stp asks him. We never ping him ourselves ([S39]) | his own files |
 | **stp** | Date, go/halt, deviations | — |
@@ -105,7 +105,7 @@ A **new KCC-20 Last Call public-mint launch** on TN10, just for this test (trump
 
 Per mint about **1.13 tKAS**: 1 tKAS carrier plus about 0.13 tKAS fee at 204 sompi/gram ([S22]). Auto-fee minters pay more, up to their cap. Splits: about 0.08 tKAS each at 100 sompi/gram plus a 1 tKAS deposit per leaf, returned on reclaim minus about 0.02 tKAS ([S23]). The storm needs its own budget as on 11 Oct ([S39] Coins). Hold 1.5× the total before T0, as in GO-BOT.
 
-With the decided steps: phases 3 to 5 = (2+5+10+20) mints/s × (300 + 300 + 600) s = **44,400 mints ≈ 50,000 tKAS** plus auto-fee extra, plus splits. Phases 6 and 7 add 6,000 mints (≈ 6,800 tKAS). Rehearsal: 8,100 mints ≈ 9,200 tKAS. Exact holdings per side: [GO-BOT](../go/bot/GO-BOT.md#coins), [GO-BUILD](../go/build/GO-BUILD.md#coins).
+With the decided steps: phases 3 to 5 = (2+5+10+20) mints/s × (300 + 300 + 600) s = **44,400 mints ≈ 50,000 tKAS** plus auto-fee extra, plus splits. Phases 6 and 7 add 6,000 mints (≈ 6,800 tKAS). Rehearsal: 8,100 mints ≈ 9,200 tKAS. **Per side (load shared):** 25,200 mints each, mint coins hold ≈ 49,000 tKAS each; bot box total ≈ 87,000 tKAS with its storm. Exact holdings per side: [GO-BOT](../go/bot/GO-BOT.md#coins), [GO-BUILD](../go/build/GO-BUILD.md#coins).
 
 ## Stop rules
 

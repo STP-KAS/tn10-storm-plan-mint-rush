@@ -29,7 +29,7 @@ Our test token copies **max 28,700,000,000, 28,700 per mint, no premine, so 1,00
 ## Wallets and coins
 
 - **About 2,000 wallets** derived from **one test seed** (testnet only). The seed **never** goes in git or in logs; only wallet indexes 0-1999 are logged.
-- **Fan-out funding** from the bot's main wallet (address not in git): about **10 tKAS each**, so about 20,000 tKAS plus fees (arithmetic). Fan-out done and confirmed before the gate; coins checked against a node, not an indexer (ADVICE 7).
+- **Fan-out funding** from the bot's main wallet (address not in git): about **10 tKAS each**, so about 20,000 tKAS plus fees (arithmetic): about 10,000 tKAS to wallets 0-999 (bot side) and about 10,000 tKAS to wallets 1000-1999 (Build side). Build's half of the seed's keys reaches the desk outside git (stp handles it); the seed itself never goes in git or logs. Fan-out done and confirmed before the gate; coins checked against a node, not an indexer (ADVICE 7).
 - Fees per mint on the stand-in: **TBD** (KCC-20 on TN10 paid 0.126-0.156 tKAS per mint on 11 Oct, [tn-master FINDINGS 16](https://github.com/STP-KAS/tn-master/blob/main/FINDINGS.md)). Check that 10 tKAS covers each wallet's share before arming.
 
 ## Senders and behaviour
@@ -40,7 +40,8 @@ Our test token copies **max 28,700,000,000, 28,700 per mint, no premine, so 1,00
 | Overpayers | some (about 15%, design) | Pay the **priority** estimate or a fixed multiple, capped |
 | Retry-spammers | a few (about 5%, design) | Resubmit on any delay or reject, short backoff; logged as such |
 
-- Senders split between **the box and Build**; each side submits to its own node plus public fallbacks (node-dead rule).
+- **Split half and half, disjoint (stp, 12 Oct):** the bot side runs wallets **0-999** on the box against the box node; Build runs wallets **1000-1999** on its desk against its desk node. Same 80/15/5 behaviour mix on each side. Public nodes only as fallback (node-dead rule, ≤ 25% of submits). A wallet is never used by both sides.
+- **Per side:** about 1,000 wallets, half of each step (1 / 2.5 / 5 / 10 mints/s), about 16,650 mints (arithmetic). The box stays within its 11 Oct proven load: no storm in this run, so the wallet processes replace the 18 storm senders; process count **TBD, confirmed at a rehearsal**.
 - **Shared launch second:** every minter starts at the same UTC second (T0, announced).
 - **Steps: the existing 2 / 5 / 10 / 20 mints/s**, 15 min each (about 1 hour). Mints per step: 1,800 / 4,500 / 9,000 / 18,000 = about 33,300 (arithmetic).
 - **Ordinary-payment probe:** a separate sender makes ordinary small payments at the normal fee throughout (rate **TBD**, low, e.g. 1/s), with a 10-min baseline before T0. This is the answer to the question.

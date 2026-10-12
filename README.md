@@ -24,8 +24,8 @@ Will be renamed to `tn10-storm-YYYY-MM-DD` once a run date is set (the [11 Oct n
 | [plan/AUTO-FEE.md](plan/AUTO-FEE.md) | The capped automatic fee-raise algorithm under test, every rule tied to past evidence |
 | **go/** | |
 | [go/README.md](go/README.md) | Shared rules, the single clock (T0), roles, how GO works, arming. **NOT ARMED: rehearsal pending** |
-| [go/bot/GO-BOT.md](go/bot/GO-BOT.md) | Bot GO: minting arms A/B, its storm side, probes, count on the box node (TBD) |
-| [go/build/GO-BUILD.md](go/build/GO-BUILD.md) | Build GO: second storm side, second counting node, no minting |
+| [go/bot/GO-BOT.md](go/bot/GO-BOT.md) | Bot GO: half the minters (arms A/B) on the box node, its storm side, probes, count on the box node (TBD) |
+| [go/build/GO-BUILD.md](go/build/GO-BUILD.md) | Build GO: second storm side, second counting node, half the minters on its desk node |
 | [go/LOGGING.md](go/LOGGING.md) | Every log file and column, both sides |
 | **logs/** | |
 | [logs/README.md](logs/README.md) | Where the logs will land (`logs/bot/`, `logs/build/`, `logs/rehearsal/`); columns in [go/LOGGING.md](go/LOGGING.md) |
@@ -86,7 +86,7 @@ stp left these to TN10 ops ("you choose", 17:20Z / 19:20 CEST). Recorded here an
 
 1. **Token launch and split:** tn ops2.
 2. **Volume:** the draft steps, 2, 5, 10, 20 mints/s (about 44,400 mints), **only after a scale rehearsal passes** ([REHEARSAL](plan/PLAN.md#rehearsal-before-any-date)).
-3. **Build:** second storm side, and the second node for the chain count. **All minting stays on the bot side**, so the fee A/B stays clean.
+3. **Build:** second storm side, and the second node for the chain count. Since 12 Oct (stp), **Build also runs half the minters** on its own node, both arms, with disjoint leaves and coins; the A/B is compared inside each side.
 4. **Optional phases:** contention (6) and carrier (7) are **in**. A KRC-20 / KNS comparison arm is **out** for now.
 5. **Arm A fixed fee:** the baseline (phase 1) normal fee estimate.
 6. **Run date:** to be set, after the rehearsal passes.

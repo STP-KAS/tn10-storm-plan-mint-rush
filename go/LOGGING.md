@@ -83,7 +83,8 @@ Logging and probes run from **R1 (T0−00:30)** to END. The count files are writ
 |---|---|---|
 | sec, minute, public-nodes, rejects, miner, host, node, events, gates, ntp, steps, SUMMARY | yes | yes |
 | chain-count, block-mass, pulse-method-minute | yes (the box node) | yes (desk node) |
-| mint-minute, feeest, mint-mass-sample, confirm | yes | no (no minting) |
+| mint-minute, feeest, mint-mass-sample | yes | yes |
+| confirm | yes (probes and mints) | yes (mints) |
 
 ## Events added for this run
 

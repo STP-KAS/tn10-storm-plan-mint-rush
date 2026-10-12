@@ -2,116 +2,106 @@
 
 > ## NOT ARMED: rehearsal pending
 >
-> Do not start anything from this file. It becomes the GO only after the [rehearsal](../../plan/PLAN.md#rehearsal-before-any-date) has passed and the arming commit has set T0 ([how GO works](../README.md#how-go-works)).
+> Do not start anything from this file. It becomes the GO only after the [rehearsal](../../plan/PLAN.md#rehearsal-before-any-date) has passed and the arming commit has set T0 ([how GO works](../README.md#how-go-works)). **Once armed, this file pasted into your chat is the GO: no questions, problems are fixed and logged.**
 
-# GO-BOT: KCC-20 mint rush under storm load, TN10, T0 = date to be set
+# GO-BOT: KCC-20 mint rush under storm load, TN10 (bot side, on the box)
 
-You are the bot side: **TN10 ops** (operator: the box node, the miner, the storm senders, the minters) with **tn ops2** (logging, the chain count, the write-up). Build's file: [GO-BUILD.md](../build/GO-BUILD.md). Shared rules and the clock: [go/README.md](../README.md). Logging: [LOGGING.md](../LOGGING.md).
+You are the bot side: **TN10 ops** (box node, miner, storm senders, half the minters, probes) with **tn ops2** (logging, count, write-up). This file is complete on its own. Build runs the other half from [GO-BUILD](../build/GO-BUILD.md); the plan is [PLAN.md](../../plan/PLAN.md).
 
-**This prompt is locked once stp sends it.** Sending is not the start. It means: get ready now, be ready at T0, and run to END without stp watching. A change after the lock goes in `events.csv` as a `deviation`.
+**Your jobs:** storm side at 1,200 tx/s; **half of all minting** (both arms, P3 to P7) against **the box node**; probes; the first counting node.
 
-## GO
+## Clock (shared with Build)
 
-When this file lands in your chat, that is the GO. No questions. Get ready at once; problems are fixed and logged, never turned into a question.
+| Step | Offset | UTC | CEST | Storm (this side) | Mints (this side, total of both arms) |
+|---|---|---|---|---|---|
+| PREP: node synced, coins, leaves, loggers built | T0−01:00 | arming | arming | off | off |
+| **R1** gate; logging (and probes, bot only) start | T0−00:30 | arming | arming | off | off |
+| **R2** gate; miner on; ready file | T0−00:10 | arming | arming | off | off |
+| **P1 baseline**; arm A fee frozen at T0+00:09 | T0+00:00–00:10 | arming | arming | off | off |
+| **P2 storm only** | T0+00:10–00:40 | arming | arming | **ON** | off |
+| settle | T0+00:40–00:45 | arming | arming | off | off |
+| **P3 mint rush only**, 5 min per step, arm A rules on both wide halves | T0+00:45–01:05 | arming | arming | off | **1 / 2.5 / 5 / 10 mints/s** |
+| settle | T0+01:05–01:10 | arming | arming | off | off |
+| **P4 rush + storm, fixed fee**, 5 min per step, arm A rules | T0+01:10–01:30 | arming | arming | **ON** | **1 / 2.5 / 5 / 10** |
+| **P5 rush + storm, A/B**, 10 min per step; half arm A, half arm B | T0+01:30–02:10 | arming | arming | **ON** | **1 / 2.5 / 5 / 10** (0.5 / 1.25 / 2.5 / 5 per arm) |
+| **P6 contention**: 32 minters on this side's 8 narrow leaves, arm B rules | T0+02:10–02:20 | arming | arming | **ON** | **2.5** |
+| **P7 carrier**: arm B rules, half the processes with a 0.2 tKAS carrier | T0+02:20–02:30 | arming | arming | **ON** | **2.5** |
+| **END**: storm and minters stop, miner off, node stays up | **T0+02:30** | arming | arming | off | off |
+| **COUNT** from this side's node, before pruning | T0+02:30–04:30 | arming | arming | — | — |
+| Logs pushed | by T0+05:30 | arming | arming | — | — |
 
-**T0 = date to be set.** Offsets are the same in both zones; the arming commit fills the UTC and Brussels (CEST = UTC+2; CET = UTC+1 from 25 Oct 2026) columns.
+UTC in git; Brussels is CEST = UTC+2 until 25 Oct 2026, CET = UTC+1 after. The arming commit replaces every "arming" cell with the real time. Steps change on the clock, never early, never extended. Both sides run the **same clock**; the network sees the sum (2 / 5 / 10 / 20 mints/s in P3 to P5, 5 in P6 and P7).
 
-| What | Offset | UTC | Brussels |
-|---|---|---|---|
-| PREP: the box node synced, UTXO index on, coins claimed, minters loaded with their leaves, loggers built | T0−01:00 | — | — |
-| **R1**: read the box node, coins, disk, RAM, each public node, NTP; logging and probes start | T0−00:30 | — | — |
-| **R2**: storm senders and minters connected and idle; miner on | T0−00:10 | — | — |
-| **P1 baseline**: nothing sends; at T0+00:09 freeze the arm A fee | T0+00:00–00:10 | — | — |
-| **P2 storm only**: storm 1,200 tx/s | T0+00:10–00:40 | — | — |
-| settle: storm off | T0+00:40–00:45 | — | — |
-| **P3 mint rush only**: 2 / 5 / 10 / 20 mints/s, 5 min each, arm A rules, both wide pools | T0+00:45–01:05 | — | — |
-| settle | T0+01:05–01:10 | — | — |
-| **P4 rush + storm, fixed fee**: storm 1,200; mints 2 / 5 / 10 / 20, 5 min each, arm A rules | T0+01:10–01:30 | — | — |
-| **P5 rush + storm, A/B**: storm 1,200; mints 2 / 5 / 10 / 20, 10 min each; pool A arm A, pool B arm B, half the target each | T0+01:30–02:10 | — | — |
-| **P6 contention**: storm 1,200; 64 minters on the 16-leaf narrow pool, 5 mints/s, arm B rules | T0+02:10–02:20 | — | — |
-| **P7 carrier**: storm 1,200; 5 mints/s, arm B rules, half the minters with a 0.2 tKAS carrier | T0+02:20–02:30 | — | — |
-| **END**: storm senders and minters stop, miner off | **T0+02:30** | — | — |
-| **COUNT** from the box node, before pruning | T0+02:30–04:30 | — | — |
-| Logs pushed to `logs/bot/` | by T0+05:30 | — | — |
-| `logs/COMBINED.md`, `logs/WRITE-UP.md` (tn ops2) | by T0+06:30 | — | — |
+## Your node: the box node
 
-Steps change on the clock. A saturated step (accepted < 95% of submitted for 60 s, Kaspa Pulse's definition) is marked `saturated` and still runs its full time.
+- A **fresh** pruned TN10 node on the box (n2 was deleted on 12 Oct; **TBD**, synced before arming): kaspad 2.1.0, testnet-10, not archival, **UTXO index on**, default mempool scale, RPC and peers on loopback only, no tunnel. Never `--enable-unsynced-mining`.
+- Used for: **your minters' submits (primary)**, leaf state, fee reads, the count, the miner. Fallback for minters: the five public TN10 nodes, at most 25% of minter submits, only while the box node is node-dead.
+- **Freeze:** DAA still and sink lag over 3 minutes: restart on the same flags (at most once per 20 minutes), log `node-restart`, rebroadcast pending mints.
+- **Disk guard:** the box node stops below 10 GB free; pruning bursts of about 16 GB in 30 min have been seen. Prune your own logs, never the chain.
 
-Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com). The node-dead rule, the chain count right after END, the two-node per-minute counter and the baseline are his.
+## Storm side
+
+- **1,200 tx/s flat** in P2 and P4 to P7 (basis: 11 Oct steps.csv window mean 1,211.87 accepted). No climb, no cut.
+- **At most 18 storm senders** (the 11 Oct proven count), staggered launches, one locked scheduler, at most one relaunch per sender per minute.
+- Submits to **the five public TN10 nodes only** (names as 11 Oct, [GO-BOT-RUN](https://github.com/STP-KAS/tn10-storm-2026-10-10/blob/main/go/bot-run/GO-BOT-RUN.md#where-you-send)); each sender picks four. Never to Build's node.
+- **Fees fixed 400/600** sompi/gram, half the lanes each, no sit-out, no quote-skip. Label: "no-signature hop, anyone-can-spend, not realistic payments".
+
+## Your minters (half of the run)
+
+| Item | Value |
+|---|---|
+| Wide pool A leaves | **leaves 0-511** (512) |
+| Wide pool B leaves | **leaves 0-511** (512) |
+| Narrow pool leaves | **leaves 0-7** (8) |
+| Wide minter processes | **32**: 16 on pool A, 16 on pool B, 32 leaves each (P3 and P4: all 32 use arm A rules; P5: pool A = arm A, pool B = arm B; P7: all arm B) |
+| Narrow minter processes (P6 only) | **32**, 4 per leaf on purpose |
+| Minter processes live at once | at most 32 (wide) + 32 idle narrow until P6 |
+| Pace at the top step | 10 mints/s on this side: each wide process about every 3.2 s; a leaf is reused about every 100 s |
+| Mints on this side | P3 to P5: 22,200; P6: 1,500; P7: 1,500; **total 25,200** (half the run) |
+
+## Probes (bot only)
+
+One plain self-payment per tier every 30 s at 1×, 2×, 5×, 10× the node minimum feerate, R1 to END, timed submit to accepted (`confirm.csv`).
+
+## RAM and processes on the box
+
+At most **18 storm senders + 32 live minter processes + probes + loggers**. A new process launches only while free RAM ≥ 2.5 GB; never under 1.5 GB. **This total is not yet proven on the box: the rehearsal must show it** (RISKS). If RAM hits the floor, stop launching minters, log `deviation`; the storm count stays 18.
+
+## Coins (arithmetic, hold before R1)
+
+- **Storm:** 1,200 tx/s × 6,600 s ≈ 7.9M tx × about 643 grams × 500 sompi/gram ≈ 25,500 tKAS → **hold ≈ 38,000 tKAS**.
+- **Mints:** 25,200 × about 1.13 tKAS (1 tKAS carrier + about 0.13 tKAS fee at 204 sompi/gram, 11 Oct measured) ≈ 28,500 tKAS, plus arm B's extra up to its cap (B-rule mints on this side: 5,550 in P5 + 1,500 in P6 + 1,500 in P7 = 8,550, ≤ 0.5 tKAS each ≈ 4,300) ≈ 32,800 → **hold ≈ 49,000 tKAS** (1.5×) in payer coins of ≥ 10 tKAS, on addresses only this side uses.
+- **Box total ≈ 87,000 tKAS**, from the bot main wallet (address not in git), through the claim ledger; check every 15 min; never list a whole address in one call.
 
 ## Gates
 
-**R1 (T0−00:30)**, write `gates.csv`; a failed read is fixed and logged, it never moves T0:
-- the box node synced, sink lag < 5 s, DAA moving; **UTXO index on** (minters read leaf state from it). If the box node has no UTXO index, minters read through the public nodes and that is a `deviation` (rebuilding the index takes about 18.5 min offline and about 13 GB; never do it inside the window).
-- Each of the five public nodes answers, synced; note its fee quote.
-- Coins: at least the [holdings below](#coins), claimed in the ledger.
-- Leaves: 1,024 in pool A, 1,024 in pool B, 16 in the narrow pool, allowances as in [PLAN, The token](../../plan/PLAN.md#the-token), read from a node (counts only in git).
-- Disk ≥ 20 GB free on the box; RAM ≥ 2.5 GB free.
-- NTP offset logged.
+- **R1 (T0−00:30)**, `gates.csv`: box node synced, sink lag < 5 s, UTXO index on; 5 public nodes answer; coins ≥ holdings; your 512 + 512 + 8 leaves read from the node with their allowances; disk ≥ 20 GB free; RAM ≥ 2.5 GB free; NTP offset logged. A failed read is fixed and logged; it never moves T0.
+- **R2 (T0−00:10)**: storm senders and 32 wide minter processes connected and idle; probes running; miner on if synced. Build's ready file comes via stp; do not wait for it.
 
-**R2 (T0−00:10)**: storm senders and all 64 + 64 minter processes connected and idle; probes running; miner on if the box node is synced. Build's ready file comes via stp; do **not** wait for it; log a `deviation` if it is missing at T0.
+## Miner
 
-## Your storm side
+Exactly one, one thread, on the box node's loopback, paying the bot's own address (not in git). On at R2 if synced; off while unsynced; off at END.
 
-- **1,200 tx/s flat** in P2 and P4 to P7. Basis: your 11 Oct 5-hour mean was 1,211.87 tx/s accepted ([steps.csv](https://github.com/STP-KAS/tn10-storm-2026-10-11/blob/main/logs/bot/steps.csv)). No climb, no cut: the storm is the constant the mints are measured against. If a 15-minute window is not clean, log it; do not change the rate.
-- Shape as 11 Oct: the no-signature hop. Label: "no-signature hop, anyone-can-spend, not realistic payments".
-- At most 18 storm senders; extra processes only while box RAM ≥ 2.5 GB, never under 1.5 GB (11 Oct rule).
-- **Fees fixed 400/600** sompi/gram (half the lanes each). **No sit-out** in this run. Log the quote every minute.
+## Rules (complete; same on both sides)
 
-## Your minters
+- **Saturation** (Kaspa Pulse's definition): accepted < 95% of submitted for 60 s. The step is marked `saturated` and still runs its full time.
+- **Node-dead rule** (Kaspa Pulse): stop using a node on 5 s of RPC failure, not synced, sink lag over 60 s on a fresh read, or virtual DAA still for 30 s; resume by itself on a healthy fresh read. Public nodes: about 20 errors in a row cools that node for 30 s. A failed submit is a reject, never "sent". Log `node-dead` / `node-back`.
+- **Minters, both arms:** coin-in-flight set (AUTO-FEE R7); leaf state read from a node with a UTXO index, never from an indexer (R8); rebroadcast pending mints on reconnect or restart (R9); back off on `mempool-full` 1, 2, 4 s (R11); payer coins ≥ 10 tKAS; carrier 1 tKAS (P7: 0.2 tKAS for half the processes). A mint counts as landed only when its id is in the virtual chain's accepted ids.
+- **Arm A (fixed):** feerate = median of `normal[0]` read every 5 s in P1 (T0+00:00–00:09) from your own node plus 2 public nodes, frozen at T0+00:09, logged as `fee-freeze`. Never changed, no bumps. The two sides freeze independently; both values are logged and compared.
+- **Arm B (auto):** [AUTO-FEE](../../plan/AUTO-FEE.md) R0 to R11, constants frozen at T0: R0 median of 2-3 live nodes, `fee-outlier` on a node > 3× the median; base `max(2 × normal[0], 2 × floor)`; congestion: `normal[0]` +50% in 60 s or mempool > 50,000; bump after 10 s at 1.5×, at most 4; caps `min(priority, 5 × normal[0])` and **0.5 tKAS per mint**; at a cap: error and pause that process.
+- **Disjoint sets:** only your own leaves and your own coins. Never build on the other side's leaves or coins; never submit to the other side's node.
+- **Keep going, but fix first:** a problem is fixed and logged (`fix`, `deviation`). Only END or stp's halt stops the run.
+- **Halt (stp only):** halt flag, stop the watchdog first, then the scheduler, storm senders and minters to 0, wait 10 s, hard-kill every sender, minter and the miner by process name, check nothing restarts. No rebroadcast after a halt. Node and read-only loggers stay up; the count still runs.
+- **Public repo:** counts only. No IP, host, port, key, seed, txid, covenant id, wallet address, tunnel or local path. Leak-scan before every push. No force-push, no tags, no releases. Do not ping Kaspa Pulse; stp does that.
 
-- **Arm A (fixed):** feerate = the **median of the box node's `normal[0]` reads in P1** (every 5 s, T0+00:00–00:09), frozen at T0+00:09, logged as `fee-freeze`. Never changed. No bumps.
-- **Arm B (auto):** [AUTO-FEE](../../plan/AUTO-FEE.md) R1 to R11 with the constants frozen at T0: base `max(2 × normal[0], 2 × floor)` every 30 s; congestion = `normal[0]` up > 50% in 60 s or read mempool > 50,000; bump after 10 s at 1.5×, at most 4 bumps; caps `min(priority, 5 × normal[0])` and **0.5 tKAS per mint**; at the cap: error and pause that minter. **Prices come from [AUTO-FEE R0](../../plan/AUTO-FEE.md):** every 5 s read `getFeeEstimate` on at least 2, ideally 3, live nodes (the box node plus public nodes); use the median `priority` and `normal[0]`; ignore a node whose priority is more than 3× the median and log `fee-outlier` (2 nodes more than 3× apart: use the lower, log `fee-outlier`). One node's estimate can be badly wrong after a stale mempool (rusty-kaspa PR #1147 report: 1,644 vs 100; upstream, not tested by us).
-- **Fee quotes, both arms and the storm:** write a `fee-outlier` event whenever a node read for `feeest.csv` fails the R0 test. The storm fee stays 400/600 and arm A stays frozen; the event is a record only.
-- **Both arms:** coin-in-flight set (R7); leaf state from a node, never an indexer (R8); rebroadcast on reconnect (R9); back-off on `mempool-full` (R11); payer coins ≥ 10 tKAS; carrier 1 tKAS (P7: 0.2 tKAS for half the minters).
-- **Processes:** 32 per arm in the wide pools (32 leaves each), 64 in the narrow pool in P6. Each process paces itself to its share of the step target.
-- **Where mints go:** the five public nodes, the same set for A and B. Never the box node.
-- A mint counts as landed only when its id is in the virtual chain's accepted ids. Per-mint ids stay on the box.
+Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com): the node-dead rule, the baseline, saturation before T0, the two-node per-minute count and the chain count right after END are his.
 
-## Where you send
+## Logging
 
-- **Storm and mints: the five public TN10 community nodes only** (names as on 11 Oct, [tn10-storm-2026-10-10 GO-BOT-RUN](https://github.com/STP-KAS/tn10-storm-2026-10-10/blob/main/go/bot-run/GO-BOT-RUN.md#where-you-send)). Each process picks four of the five at launch. **Never submit to the box node or to Build's node.**
-- **Node-dead rule (Kaspa Pulse), per public node:** about 20 connection or RPC errors in a row cools that node for 30 s; its load moves to the process's other live nodes. No live node: wait, count no attempt. A failed submit is a reject, never "sent". Log `node-dead` / `node-back`.
-- **Be a fair guest:** a node that keeps rejecting or dropping for more than 10 minutes is dropped for the hour and logged.
-
-## The box node: reads, the count and the miner
-
-- the box node: kaspad 2.1.0, testnet-10, pruned (not archival), UTXO index on, RPC and peers on loopback only, no tunnel, default mempool scale.
-- For health reads, fee quotes (`feeest.csv`), watching acceptance, the count and the one miner. the box node lagging does not stop senders or minters; it is logged, and arm B reads prices from a live public node meanwhile.
-- **Disk:** pruning bursts up to about 16 GB in 30 minutes have been seen. Guard stops the box node below 10 GB free. Prune your own logs, never the chain.
-- **Freeze:** DAA still and sink lag over 3 minutes: restart the box node on the same flags (at most once per 20 minutes), log `node-restart`, rebroadcast pending mints (R9).
-
-## Coins
-
-Hold before R1 (arithmetic; 1.5× need):
-- **Storm:** 1,200 tx/s × 6,600 s (110 storm minutes) ≈ 7.9 million tx × about 643 grams × 500 sompi/gram average ≈ 25,500 tKAS → **hold ≈ 38,000 tKAS**.
-- **Mints:** 50,400 mints × about 1.13 tKAS (1 tKAS carrier + about 0.13 tKAS fee) ≈ 57,000 tKAS, plus arm B's extra up to its cap (≤ 0.5 tKAS per B-rule mint; 11,100 in P5 + 3,000 in P6 + 3,000 in P7 = 17,100, so ≤ about 8,600) → about 65,600 → **hold ≈ 98,000 tKAS**, in payer coins of ≥ 10 tKAS each.
-- Through the claim ledger only; never list a whole address in one call; never re-add a spent or claimed coin. Check every 15 minutes. If a buffer runs low, lower that side (storm or mints) and log a `deviation`; do not stop.
-- Leaf deposits and split fees are tn ops2's launch costs, not in these numbers.
-
-## Your miner
-
-Exactly one box-CPU kaspa-miner, one thread, on the box node's loopback gRPC, paying the bot's own address (kept out of git). On at R2 if the box node is synced; off while the box node is unsynced; off at END.
-
-## Build
-
-Build runs the second storm side and the second counting node on the same clock. It never mints. stp passes Build's ready file at R2; do not wait for it. Never change your rates to cover Build.
-
-## Log everything (tn ops2)
-
-From R1 to END, as in [LOGGING.md](../LOGGING.md), `step` = phase and step (`P5-s3`): `sec.csv`, `minute.csv`, `public-nodes.csv`, `rejects.csv`, `miner.csv`, `host.csv`, `node.csv`, `events.csv`, `gates.csv`, `ntp.csv`, **`mint-minute.csv`, `feeest.csv`, `mint-mass-sample.csv`, `confirm.csv` (probes and mints)**, `pulse-method-minute.csv` (live); after END `chain-count.csv`, `block-mass.csv`, `steps.csv`, `SUMMARY.md`. Live `logs/bot/SUMMARY.md` every 15 minutes: phase and step, storm accepted, mints landed per arm, p90 time to accept per arm, rejects by reason, last network minute.
-
-## Halt
-
-Only stp halts. Then: halt flag, **stop the watchdog first**, then the scheduler, storm senders and minters to 0, wait 10 s, hard-kill every bot sender, every minter and the miner by process name, check nothing restarts. **No rebroadcast after a halt.** the box node and read-only loggers stay up. The count still runs.
+From R1 to END ([LOGGING.md](../LOGGING.md)), `side = bot`, `step` = phase and step (`P5-s3`): `sec`, `minute`, `public-nodes`, `rejects`, `miner`, `host`, `node`, `events`, `gates`, `ntp`, `mint-minute`, `feeest`, `mint-mass-sample`, `confirm` (probes and mints), `pulse-method-minute` (live); after END `chain-count`, `block-mass`, `steps`, `SUMMARY.md`. Live `SUMMARY.md` every 15 min.
 
 ## After END
 
-1. **END (T0+02:30):** storm senders and minters stop, miner off, live loggers stop. the box node stays up.
-2. **COUNT (T0+02:30–04:30, before pruning):** `chain-count.csv` and `block-mass.csv` per minute from T0−01:00 to END, from the box node. Build counts the same minutes from its node.
-3. **Headline:** network unique accepted tx/s per phase and step (peak complete minute, mean, median); minutes where the box node and Build's node differ by more than 1% are `disagree` (in the mean, not in peak or median). Mint results per arm: success rate, p50/p90/p99, fee per mint, rejects by reason, collisions. Everything includes about 56 tx/s base load (Kaspa Pulse).
-4. **By T0+05:30:** push the logs to `logs/bot/` in **STP-KAS/tn10-storm-plan-mint-rush** (renamed to `tn10-storm-YYYY-MM-DD` by then), as STP-KAS. **By T0+06:30:** tn ops2 adds `logs/COMBINED.md` and `logs/WRITE-UP.md`, fills the README Results, and updates tn-master. Counts only, leak-scanned.
-
-## Never
-
-No IP, host, port, key, seed, txid, covenant id, wallet address or local path in the repo. No tunnel. No tags, no releases, no force-push. No second miner. No archival. No storm fee other than 400/600. No arm B fee above its caps. No submits to the box node or to Build's node. No firing at a dead node. No minting outside the clock. No indexer as the source of leaf state. Do not ping Kaspa Pulse; stp does that.
+1. COUNT T0+02:30–04:30: `chain-count.csv`, `block-mass.csv` per minute T0−01:00 to END from the box node. Build counts the same minutes from its node; minutes that differ by more than 1% are `disagree`.
+2. Headline: network unique accepted tx/s per phase and step; mint results per arm and per side (success, p50/p90/p99, fee per mint, rejects by reason, collisions); about 56 tx/s base load included.
+3. By T0+05:30 push `logs/bot/`; by T0+06:30 tn ops2 adds `logs/COMBINED.md`, `logs/WRITE-UP.md`, fills the README Results. Counts only, leak-scanned.

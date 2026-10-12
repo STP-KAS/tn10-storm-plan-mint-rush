@@ -31,12 +31,12 @@ Thank you, Kaspa Pulse (@gokugalax, kaspapulse.com). This run sheet is built on 
 | **P1 baseline**, nothing of ours on the network; arm A fee frozen at T0+00:09 | T0+00:00–00:10 | — | — | reads only | reads only |
 | **P2 storm only** | T0+00:10–00:40 | — | — | storm 1,200 tx/s | storm, its rate |
 | settle (storm off) | T0+00:40–00:45 | — | — | off | off |
-| **P3 mint rush only**: 2 / 5 / 10 / 20 mints/s, 5 min each | T0+00:45–01:05 | — | — | mints (arm A rules) | off |
+| **P3 mint rush only**: 2 / 5 / 10 / 20 mints/s network (half per side), 5 min each | T0+00:45–01:05 | — | — | mints (arm A rules) | mints (arm A rules) |
 | settle | T0+01:05–01:10 | — | — | off | off |
-| **P4 mint rush + storm, fixed fee**: 2 / 5 / 10 / 20, 5 min each | T0+01:10–01:30 | — | — | mints (A rules) + storm | storm |
-| **P5 mint rush + storm, A/B**: 2 / 5 / 10 / 20, 10 min each, half A half B | T0+01:30–02:10 | — | — | mints A + B + storm | storm |
-| **P6 contention**: narrow pool, 5 mints/s | T0+02:10–02:20 | — | — | mints (B rules) + storm | storm |
-| **P7 carrier**: 5 mints/s, half with 0.2 tKAS carrier | T0+02:20–02:30 | — | — | mints (B rules) + storm | storm |
+| **P4 mint rush + storm, fixed fee**: 2 / 5 / 10 / 20, 5 min each | T0+01:10–01:30 | — | — | mints (A rules) + storm | same as bot |
+| **P5 mint rush + storm, A/B**: 2 / 5 / 10 / 20, 10 min each, half A half B | T0+01:30–02:10 | — | — | mints A + B + storm | same as bot |
+| **P6 contention**: narrow pool, 5 mints/s | T0+02:10–02:20 | — | — | mints (B rules) + storm | same as bot |
+| **P7 carrier**: 5 mints/s, half with 0.2 tKAS carrier | T0+02:20–02:30 | — | — | mints (B rules) + storm | same as bot |
 | **END**: all senders and minters stop, miners off | **T0+02:30** | — | — | yes | yes |
 | **COUNT** from two nodes, before pruning | T0+02:30–04:30 | — | — | the box node | Build's node |
 | Logs pushed | by T0+05:30 | — | — | `logs/bot/` | `logs/build/` |
@@ -49,8 +49,8 @@ Step changes happen on the clock, never early, never extended. Probes (1×, 2×,
 
 | Side | Who | Does | Sends to | Node | Miner |
 |---|---|---|---|---|---|
-| Bot | **TN10 ops** (the box node, miner, storm senders, minters) with **tn ops2** (logging, count, write-up) | **All minting** (arms A and B, P6, P7), storm side, probes | The five public TN10 nodes only | the box node on the box: reads, fee quotes, the bot's count, the miner. Never submits | 1 |
-| Build | **Grok Build** on stp's desk | **Second storm side**, **second counting node**. **No minting** | Its own desk node (75%) and the five public nodes (25%, backs off first) | Its desk node, pruned, UTXO index on | 1 |
+| Bot | **TN10 ops** (the box node, miner, storm senders, minters) with **tn ops2** (logging, count, write-up) | Storm side (≤ 18 senders), **half the minters** (32 wide + 32 narrow processes; leaves 0-511 / 0-511 / 0-7), probes | Storm: the five public TN10 nodes. Minters: the box node (public fallback ≤ 25%) | the box node: minter submits, reads, fee quotes, count, miner | 1 |
+| Build | **Grok Build** on stp's desk | **Second storm side**, **second counting node**, **half the minters** (32 wide + 32 narrow; leaves 512-1023 / 512-1023 / 8-15) | Storm: desk node (75%) and public nodes (25%). Minters: desk node (public fallback ≤ 25%) | Its desk node, pruned, UTXO index on | 1 |
 | Token | **tn ops2** | Launches and splits the run token (limit 1,000, supply 60,000,000) and the rehearsal token (limit 1,000, supply 10,000,000) before arming | — | — | — |
 
 Never submit to the other side's node.
@@ -59,6 +59,7 @@ Never submit to the other side's node.
 
 - **Saturation (defined before T0, Kaspa Pulse):** accepted < 95% of submitted for 60 s. A saturated step is marked, never extended or shortened.
 - **Node-dead rule (Kaspa Pulse):** own node used for submits: stop on 5 s of RPC failure, not synced, sink lag over 60 s on a fresh read, or virtual DAA still for 30 s; resume by itself when a fresh read is healthy. Public nodes: about 20 errors in a row cools that node for 30 s, load moves to the others. A failed submit is a reject, never "sent". No firing at a dead node.
+- **Disjoint sets:** each side mints only on its own leaves with its own coins and submits mints to its own node; never to the other side's node.
 - **Fees are fixed for every storm sender** (bot 400/600, Build 200/300), **no sit-out rule** in this run, so the storm load stays the same while mints compete. Mint fees: arm A fixed, arm B [AUTO-FEE](../plan/AUTO-FEE.md) with caps.
 - **Miners:** exactly one per side, one thread, on the side's own node, on at R2 if synced, off while that node is unsynced, off at END.
 - **Keep going, but fix first.** A problem is fixed and logged (`fix`, `deviation`). Only END or stp's halt stops the run.
