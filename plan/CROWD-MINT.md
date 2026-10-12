@@ -2,6 +2,8 @@
 
 > **NOT ARMED.** Approved by stp as a design only. **Date: TBD (stp decides).** Testnet-10 only, tKAS has no value. Separate run, about 1 hour, announced a day ahead in the TN10 channels with a UTC window.
 
+If a KCC-20 mint rush ever congested mainnet for a day, that would be bad for Kaspa's image. This is a concern, not a prediction: we want to find out on TN10 first, before it can happen on mainnet.
+
 ## One question
 
 **Do ordinary payments still confirm during a 2,000-wallet mint rush?**
