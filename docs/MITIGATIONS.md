@@ -1,8 +1,10 @@
-> **Early thesis.** Our own reasoning, open to challenge. **Not advice, and not a proposal to Kaspa core developers.** [Disclaimer](../DISCLAIMER.md) · [Home](../README.md) · TN10 only. Mainnet: **not tested (label B)**.
+> **Early thesis by stp.** Our own reasoning from the numbers and data, open to challenge. **Not a claim of absolute truth. Not advice, and not a proposal to Kaspa core developers.** [Disclaimer](../DISCLAIMER.md) · [Home](../README.md) · TN10 only. Mainnet: **not tested (label B)**.
 
 # MITIGATIONS: what could keep ordinary payments flowing during a mint rush
 
 Labels on every line: **[fact]** = sourced (link given); **[code]** = our reading of rusty-kaspa source at `master` commit [`01b532e`](https://github.com/kaspanet/rusty-kaspa/tree/01b532e) (22 Sep 2026), not a maintainer statement; **[reasoning]** = our thinking, not measured; **[measure]** = what our runs can count.
+
+**Attribution:** Independent counts by Kaspa Pulse stand behind the numbers. The analysis and thesis here are stp's, based on those counts plus our minute data. Kaspa Pulse signs the counts; stp signs the conclusions.
 
 ## The starting rule
 
@@ -84,6 +86,10 @@ Labels on every line: **[fact]** = sourced (link given); **[code]** = our readin
 - **Cons / risks [reasoning]:** slow, needs broad agreement; a rush can grow to fill new space; out of scope for a TN10 test desk.
 - **[measure]:** mints per block and mass per block in Run 1 (6-8 mints per block is arithmetic, not measured yet).
 
+### 7. Public congestion gauge (idea, 15 Oct 2026)
+
+Kaspa Pulse noted that our mitigation ideas around early warning match something they already do: they read fee estimates per minute on two nodes. A public congestion gauge — mempool and block fill per minute — would give builders the early warning described. Worth thinking about together. **[reasoning / offer]** Not a claim; an open idea.
+
 ## Comparison
 
 | # | Option | Who | Neutral? | Works with worst-case issuers? | Exists today | Main risk | What decides it |
@@ -94,11 +100,12 @@ Labels on every line: **[fact]** = sourced (link given); **[code]** = our readin
 | 4 | General node policy | node devs / operators | yes | yes | fee eviction, orphan cap, expiry [code] | per-sender limits easy to dodge; uneven nodes | Run 1 rejects, mempool per node |
 | 5 | Type-based share (e.g. 70% KCC) | node policy or consensus | **no** | partly | no: lane caps exist (consensus, 50 lanes/block) but KCC-20 mints and payments share the native lane [code] | neutrality, gaming, MEV-like auction, empty reserved space | only if Run 1 shows probes stuck |
 | 6 | Consensus capacity | core / KIPs | yes | yes | KIP-9 live; DAGKnight Proposed [fact] | slow; demand fills space | mass per block |
+| 7 | Public congestion gauge | independent counters / community | yes | yes | partly (Pulse already reads fee estimates per minute on two nodes) | needs reliable public data | whether builders use the early warning |
 
 **A note on standards (stp's view).** Covenants are permissionless: anyone can build a KCC-style token standard on mainnet. In our view KCC-20 is the benchmark, because it comes out of the work of Kaspa's core developers and contributors and its rules are enforced on Kaspa itself, not by one off-chain indexer. Two KRC-20 episodes show why that matters: [the 2024 launch rush](KRC20-HISTORY.md#2-mainnet-launch-15-sep-2024-1200-utc), and [the September 2026 Kasplex indexer exploit](KRC20-HISTORY.md#6-the-september-2026-kasplex-indexer-exploit) ([Kasplex, 22 Sep 2026](https://x.com/kasplex/status/2102259081277059509); [go-krc20d release krc20d-3.01.260930](https://github.com/kasplex/go-krc20d/releases)), where forged transfers were credited off-chain while Kaspa itself was unaffected. Any other KCC-style standard should be checked against KCC-20 before people trust it with a mint rush. KCC-20 itself is at Last Call, not final, and testing it on TN10 under load is part of what earns that role.
 
 **Why core moves carefully (stp's view).** Working on these tests, stp came to understand why Kaspa's core developers and contributors move carefully and ship only when ready. [The September 2026 Kasplex exploit](KRC20-HISTORY.md#6-the-september-2026-kasplex-indexer-exploit) hit an off-chain indexer, while Kaspa L1 itself was unaffected; our own storm runs keep surfacing edge cases that only appear under load (for example [rusty-kaspa #1147](https://github.com/kaspanet/rusty-kaspa/pull/1147)). Shipping only when ready is slower, but it is why the base layer has held, and it is why public load tests on TN10 are useful to that careful work.
 
-## Conclusion (early thesis, [reasoning])
+## Conclusion (early thesis by stp, based on numbers and data, [reasoning])
 
-The network must stay healthy assuming worst-case issuers, so we rank token throttles as good manners, not a defence. The defences we would lean on are type-neutral: the fee market (already live), wallets that read fees correctly and bump within a cap, and general node policy. A type-based share such as 70% for KCC is the option we like least: it breaks neutrality, invites gaming, and would hit useful covenant apps along with memes. We do not know yet whether any of this is needed. **Run 1 is the test:** if ordinary payments at the normal fee still land in seconds during a crowd mint, the fee market is doing its job and the honest answer is "no new mechanism needed". If they wait for minutes, we report the numbers and leave the design to the people who build Kaspa.
+Not a claim of absolute truth. The network must stay healthy assuming worst-case issuers, so we rank token throttles as good manners, not a defence. The defences we would lean on are type-neutral: the fee market (already live), wallets that read fees correctly and bump within a cap, and general node policy. A type-based share such as 70% for KCC is the option we like least: it breaks neutrality, invites gaming, and would hit useful covenant apps along with memes. We do not know yet whether any of this is needed. **Run 1 is the test:** if ordinary payments at the normal fee still land in seconds during a crowd mint, the fee market is doing its job and the honest answer is "no new mechanism needed". If they wait for minutes, we report the numbers and leave the design to the people who build Kaspa. Kaspa Pulse has offered that a public congestion gauge (mempool and block fill per minute) is something they could help with, given they already read fee estimates per minute on two nodes.
